@@ -1,0 +1,26 @@
+
+
+  /* width */
+.find-work ::-webkit-scrollbar {
+  width: 10px;
+  
+}
+
+/* Track */
+.find-work ::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 10px;
+
+}
+
+/* Handle */
+.find-work ::-webkit-scrollbar-thumb {
+background-color: #f0f0f0;
+
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.find-work ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
