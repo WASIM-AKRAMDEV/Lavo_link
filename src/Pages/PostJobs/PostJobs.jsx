@@ -60,10 +60,52 @@ const PostJobs = () => {
   });
   const [skills, setSkills] = useState([]);
   // Function to handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    uploadJobsToFirestore(formData);
-  };
+ // Function to handle form submission
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  // Check if any required fields are empty
+  if (
+    formData.category.trim() === "" ||
+    formData.title.trim() === "" ||
+    formData.description.trim() === "" ||
+    (formData.budget.type === "fixed" && formData.budget.amount.trim() === "") ||
+    (formData.budget.type === "hourly" && (formData.budget.rate.trim() === "" || formData.budget.estimatedHours.trim() === ""))
+  ) {
+    // If any required fields are empty, prevent form submission
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  // Upload data to Firestore
+  await uploadJobsToFirestore(formData);
+
+  // Clear the form after successful submission
+  setFormData({
+    category: "",
+    title: "",
+    description: "",
+    skills: [],
+    createdAt: Timestamp.now(),
+    client: {
+      id: "client_001",
+      paymentVerified: true,
+      reviewsCount: 15,
+      location: "USA",
+      totalSpent: "$100K",
+    },
+    budget: {
+      type: "",
+      amount: "",
+      estimatedHours: "",
+    },
+    proposalsCount: "More than 10",
+    saved: false,
+  });
+
+  // Clear the skills
+  setSkills([]);
+};
+
 
   // Function to handle form field changes
   const handleChange = (event) => {
@@ -236,7 +278,6 @@ const PostJobs = () => {
                 formData={formData}
                 setFormData={setFormData}
               />
-             
 
               <div className="max-w-[100%] mt-5 w-full">
                 <label

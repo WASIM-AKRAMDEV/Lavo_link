@@ -47,17 +47,37 @@ const GigUpload = () => {
   const [skills, setSkills] = useState([]);
   const [image, setImage] = useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Clear form data after successful upload
+    // Check if any required fields are empty
+    if (
+      formData.title.trim() === "" ||
+      formData.description.trim() === "" ||
+      skills.length === 0 ||
+      !image
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Upload data to Firestore
+    await uploadGigsToFirestore(formData);
+
+    // Clear the form after successful submission
     setFormData({
       title: "",
       description: "",
       skills: [],
       image: "",
     });
+
+    // Clear the skills
+    setSkills([]);
+    // Clear the image
+    setImage(null);
   };
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -125,6 +145,7 @@ const GigUpload = () => {
               setImage={setImage}
               formData={formData}
               onImageUpload={handleImageUpload}
+              skills={skills}
             />
           </div>
         </div>

@@ -1,14 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
 import { RiShieldStarLine } from "react-icons/ri";
 import { SlNotebook } from "react-icons/sl";
+import { Link } from "react-router-dom";
+import { FiPlusCircle } from "react-icons/fi";
+import { TbEdit } from "react-icons/tb";
 
 const Sidebar = () => {
+  const [editMode, setEditMode] = useState(false);
+  const [profileName, setProfileName] = useState("Shahzad");
+  const [profileTitle, setProfileTitle] = useState("Blockchain Developer");
+  const [fromLocation, setFromLocation] = useState("United States");
+  const [memberSince, setMemberSince] = useState("Mar, 2024");
+  const [newText, setNewText] = useState("");
+  const [additionalTexts, setAdditionalTexts] = useState([
+    "Lavolink Academy",
+    "Offer Contract",
+    "Get Paid",
+    "Help Center",
+  ]);
+
+  const handleAddNewText = () => {
+    if (newText.trim() !== "") {
+      setAdditionalTexts([...additionalTexts, newText]);
+      setNewText("");
+    }
+  };
+
+  const handleRemoveText = (index) => {
+    const updatedTexts = [...additionalTexts];
+    updatedTexts.splice(index, 1);
+    setAdditionalTexts(updatedTexts);
+  };
+
   return (
     <div className="w-[345px]">
-      <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between">
+      <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
+        <div className="flex justify-end items-center mb-3">
+          <button
+            onClick={() => setEditMode(!editMode)}
+            className="bg-transparent border-none text-[#5D5FEF] text-sm"
+          >
+            {editMode ? (
+              <FiPlusCircle className="text-[#737791] text-xl absolute right-6 top-3" />
+            ) : (
+              <TbEdit className="text-[#737791] text-xl absolute right-6 top-3" />
+            )}
+          </button>
+        </div>
         <div className="flex gap-3 items-center">
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
@@ -19,42 +60,121 @@ const Sidebar = () => {
             />
           </div>
           <div>
-            <h3 className="text-3xl font-semibold text-[#151D48]">Shahzad</h3>
-            <p className="text-base">Blockchain Developer</p>
+            <h3 className="text-2xl font-semibold text-[#151D48]">
+              {editMode ? (
+                <input
+                  type="text"
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  className="text-3xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
+                />
+              ) : (
+                profileName
+              )}
+            </h3>
+            <p className="text-base">
+              {editMode ? (
+                <input
+                  type="text"
+                  value={profileTitle}
+                  onChange={(e) => setProfileTitle(e.target.value)}
+                  className="text-base outline-none border-none bg-transparent"
+                />
+              ) : (
+                profileTitle
+              )}
+            </p>
           </div>
         </div>
-        <div className=" flex flex-col gap-5">
+        <div className="flex flex-col gap-5">
           <div className="flex justify-between w-full">
             <div className="flex items-center gap-2">
               <FaLocationDot className="text-[#737791] text-xl" />
-              <p className="text-sm text-[#737791]">From</p>
+              <p className="text-sm text-[#737791]">
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={fromLocation}
+                    onChange={(e) => setFromLocation(e.target.value)}
+                    className="text-sm text-[#737791] outline-none border-none bg-transparent"
+                  />
+                ) : (
+                  "From"
+                )}
+              </p>
             </div>
-            <p className="text-[#737791] text-sm">United State</p>
+            <p className="text-[#737791] text-sm">{fromLocation}</p>
           </div>
           <div className="flex justify-between w-full">
             <div className="flex items-center gap-2">
               <IoPersonCircleSharp className="text-[#737791] text-xl" />
-              <p className="text-sm text-[#737791]">Member Since</p>
+              <p className="text-sm text-[#737791]">
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={memberSince}
+                    onChange={(e) => setMemberSince(e.target.value)}
+                    className="text-sm text-[#737791] outline-none border-none bg-transparent"
+                  />
+                ) : (
+                  "Member Since"
+                )}
+              </p>
             </div>
-            <p className="text-[#737791] text-sm">Mar, 2024</p>
+            <p className="text-[#737791] text-sm">{memberSince}</p>
           </div>
         </div>
       </div>
       <div className="bg-[#f9fafb] px-10 py-4 rounded-[19px] mt-3">
         <ul className="p-0">
-          <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
-            Lavolink Academy <VscLink className="text-lg text-[#737791]" />
-          </li>
-          <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
-            Offer Contract
-            <VscLink className="text-lg text-[#737791]" />
-          </li>
-          <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
-            Get Paid <VscLink className="text-lg text-[#737791]" />
-          </li>
-          <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
-            Help Center <VscLink className="text-lg text-[#737791]" />
-          </li>
+          {additionalTexts.map((text, index) => (
+            <li
+              key={index}
+              className="text-sm text-[#737791] flex items-center gap-2 my-3"
+            >
+              {editMode ? (
+                <>
+                  <input
+                    type="text"
+                    value={text}
+                    onChange={(e) => {
+                      const updatedTexts = [...additionalTexts];
+                      updatedTexts[index] = e.target.value;
+                      setAdditionalTexts(updatedTexts);
+                    }}
+                    className="text-sm text-[#737791] outline-none border-none bg-transparent"
+                  />
+                  <button
+                    onClick={() => handleRemoveText(index)}
+                    className="text-sm text-[#737791] outline-none border-none bg-transparent"
+                  >
+                    <VscLink className="text-lg text-[#737791]" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  {text}
+                  <VscLink className="text-lg text-[#737791]" />
+                </>
+              )}
+            </li>
+          ))}
+          {editMode && (
+            <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
+              <input
+                type="text"
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+                className="text-sm text-[#737791] outline-none border-none bg-transparent"
+              />
+              <button
+                onClick={handleAddNewText}
+                className="text-sm text-[#737791] outline-none border-none bg-transparent"
+              >
+                <VscLink className="text-lg text-[#737791]" />
+              </button>
+            </li>
+          )}
         </ul>
       </div>
       <div className="bg-[#f9fafb] px-10 py-4 rounded-[19px] mt-3">
@@ -64,8 +184,13 @@ const Sidebar = () => {
             <RiShieldStarLine className="text-lg text-[#737791]" />
           </li>
           <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
-            Project Catalog
-            <SlNotebook className="text-lg text-[#737791]" />
+            <Link
+              to="/profile"
+              className="text-sm text-[#737791] flex items-center gap-2 my-3"
+            >
+              Project Catalog
+              <SlNotebook className="text-lg text-[#737791]" />
+            </Link>
           </li>
         </ul>
       </div>
@@ -77,7 +202,7 @@ const Sidebar = () => {
             Get access to all features on our Platform
           </p>
           <button className="bg-white  text-[#5D5FEF] font-bold py-2 px-8 rounded">
-          Get Pro
+            Get Pro
           </button>
         </div>
       </div>

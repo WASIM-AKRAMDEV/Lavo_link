@@ -22,7 +22,7 @@ if (!firebase.apps.length) {
 
 const storage = firebase.storage();
 
-const ImageUploader = ({ image, setImage, formData, onImageUpload }) => {
+const ImageUploader = ({ image, setImage, formData, onImageUpload ,skills }) => {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -32,6 +32,11 @@ const ImageUploader = ({ image, setImage, formData, onImageUpload }) => {
 
   const handleUpload = () => {
     if (image) {
+
+      if (!image || formData.title.trim() === "" || formData.description.trim() === "" || skills.length === 0) {
+        alert("Please fill in all required fields.");
+        return;
+      }
       const uploadTask = storage.ref(`images/${image.name}`).put(image);
 
       uploadTask.on(
@@ -96,6 +101,7 @@ const ImageUploader = ({ image, setImage, formData, onImageUpload }) => {
         <button
           className="bg-[#5D5FEF] text-white text-sm px-4 py-2 mt-4 rounded-md"
           onClick={handleUpload}
+       
         >
           Upload
         </button>

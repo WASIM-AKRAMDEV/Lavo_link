@@ -83,7 +83,7 @@ const FindWork = () => {
           ...doc.data(),
         }));
         setJobs(jobsData);
-        setFilteredJobs(jobsData); 
+        setFilteredJobs(jobsData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -115,7 +115,7 @@ const FindWork = () => {
       setFilteredJobs(jobsToFilter);
       setLoading(false);
     };
-    
+
     filterJobs();
   }, [activeCategory, searchTerm, jobs]);
 
@@ -132,15 +132,14 @@ const FindWork = () => {
     try {
       const isJobSaved = savedJobs.includes(jobId);
       const jobRef = doc(db, "jobs", jobId);
-  
+
       if (isJobSaved) {
         // Remove the job from saved jobs
         setSavedJobs(savedJobs.filter((id) => id !== jobId));
         // Update the job in Firestore to remove the timestamp
         await updateDoc(jobRef, {
           saved: false,
-          // Conditionally include createdAt only when saving the job
-          ...(jobs.createdAt && { createdAt: null }),
+          createdAt: null, // Always set createdAt to null when removing the job
         });
       } else {
         // Add the job to saved jobs
@@ -148,15 +147,13 @@ const FindWork = () => {
         // Update the job in Firestore to set the timestamp
         await updateDoc(jobRef, {
           saved: true,
-          // Set createdAt to server timestamp only when saving the job
-          ...(jobs.createdAt && { createdAt: serverTimestamp() }),
+          createdAt: serverTimestamp(), // Always set createdAt to server timestamp when saving the job
         });
       }
     } catch (error) {
       console.error("Error saving job:", error);
     }
   };
-  
 
   if (loading) {
     return (
@@ -174,7 +171,6 @@ const FindWork = () => {
       </div>
     );
   }
-
 
   return (
     <div className="find-work">
@@ -509,3 +505,4 @@ const FindWork = () => {
 };
 
 export default FindWork;
+

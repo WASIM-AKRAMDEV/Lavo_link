@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 import { signOut } from "firebase/auth";
 import { database } from "../../FirebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const navigation = [
   { name: "Find Work", current: true, path: "/" },
@@ -32,8 +33,8 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [walletAddress, setWalletAddress] = useState();
+  const location = useLocation();
   const connectWallet = async () => {
     if (window.ethereum) {
       const provider = new ethers.BrowserProvider(window.ethereum);
@@ -95,8 +96,13 @@ const Navbar = () => {
                     {navigation.map((item) => (
                       <div key={item.name} className="relative ">
                         <NavLink
+                          key={item.name}
                           to={item.path}
-                          className="text-[#737791] rounded-md px-3 py-2 font-normal xl:text-base lg:text-sm md:text-sm lg:p-2"
+                          className={`text-[#737791] rounded-md px-3 py-2 font-normal xl:text-base lg:text-sm md:text-sm lg:p-2 ${
+                            location.pathname === item.path
+                              ? "font-semibold text-[#151D48]"
+                              : "text-[#737791] font-normal"
+                          }`}
                         >
                           {item.name}
                         </NavLink>
@@ -147,12 +153,12 @@ const Navbar = () => {
                       <div>
                         <div className="flex justify-between items-center">
                           <h5 className="text-sm text-[#151D48] font-medium">
-                            LavoLink
+                            Shahzad Ali
                           </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
                         <p className=" text-xs text-[#737791] font-normal">
-                          Graphic Designer
+                          Blockchain developer
                         </p>
                       </div>
                     </Menu.Button>
@@ -182,7 +188,7 @@ const Navbar = () => {
                         )}
                       </Menu.Item>
                       <h5 className="text-[#737791] text-xs my-2">
-                        Lovalinker
+                        Shahzad Ali
                       </h5>
                       <div className="flex gap-1 py-2">
                         <button className="bg-[#5D5FEF] text-white font-normal text-sm px-[15px] py-[2px] rounded">
