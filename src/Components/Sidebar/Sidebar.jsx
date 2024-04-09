@@ -7,6 +7,7 @@ import { SlNotebook } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
+import { GiCloudUpload } from "react-icons/gi";
 
 const Sidebar = () => {
   const [editMode, setEditMode] = useState(false);
@@ -34,11 +35,32 @@ const Sidebar = () => {
     updatedTexts.splice(index, 1);
     setAdditionalTexts(updatedTexts);
   };
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const imageFile = event.target.files[0];
+    setSelectedImage(imageFile);
+  };
 
   return (
     <div className="w-[345px]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
         <div className="flex justify-end items-center mb-3">
+          <div className="absolute right-12 top-3 ">
+            <label
+              htmlFor="image-upload"
+              className="text-sm text-[#737791] cursor-pointer"
+            >
+              <GiCloudUpload className="text-xl" />
+            </label>
+            <input
+              type="file"
+              id="image-upload"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
           <button
             onClick={() => setEditMode(!editMode)}
             className="bg-transparent border-none text-[#5D5FEF] text-sm"
@@ -53,7 +75,11 @@ const Sidebar = () => {
         <div className="flex gap-3 items-center">
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              src={
+                selectedImage
+                  ? URL.createObjectURL(selectedImage)
+                  : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              }
               alt=""
               width="100%"
               height="100%"

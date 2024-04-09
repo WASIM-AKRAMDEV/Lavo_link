@@ -87,8 +87,8 @@ const Navbar = () => {
               </div>
               <div className="flex flex-1 lg:items-center lg:justify-center sm:items-stretch sm:justify-start justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <a href="#" className="text-3xl font-semibold text-[#151D48]">
-                    LavoLink
+                  <a href="#" className="font-semibold text-[#151D48] w-40">
+                    <img src="./assets/images/lavolink-logo.png" alt="" />
                   </a>
                 </div>
                 <div className="hidden lg:ml-2 sm:ml-6 lg:block w-full">
