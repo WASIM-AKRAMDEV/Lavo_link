@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import { collection, getDocs, doc , getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IoSearch } from "react-icons/io5";
@@ -75,26 +75,28 @@ const Navbar = () => {
   }, [localStorage.getItem("wallAddr")]);
   const navigate = useNavigate();
 
- // Profile data fetch
- useEffect(() => {
-  const fetchProfileData = async () => {
-    try {
-      const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
-      if (userId) {
-        const profileDocRef = doc(firestore, "profiles", userId);
-        const docSnapshot = await getDoc(profileDocRef);
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          setProfileData(data);
+  // Profile data fetch
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        // const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
+        const userId = "k8cqN13B5HM0QFNdxXGO";
+        if (userId) {
+          const profileDocRef = doc(firestore, "profiles", userId);
+          const docSnapshot = await getDoc(profileDocRef);
+          if (docSnapshot.exists()) {
+            const data = docSnapshot.data();
+            setProfileData(data);
+            console.log(data);
+          }
         }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
+    };
 
-  fetchProfileData();
-}, []);
+    fetchProfileData();
+  }, []);
 
   const handleLogout = () => {
     signOut(database)
@@ -131,7 +133,7 @@ const Navbar = () => {
               <div className="flex flex-1 lg:items-center lg:justify-center sm:items-stretch sm:justify-start justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <a href="#" className="font-semibold text-[#151D48] w-40">
-                    <img src="../assets/images/lavolink-logo.png" alt="" />
+                    <img src="/assets/images/lavolink-logo.png" alt="" />
                   </a>
                 </div>
                 <div className="hidden lg:ml-2 sm:ml-6 lg:block w-full">
@@ -188,14 +190,25 @@ const Navbar = () => {
                         <span className="absolute -inset-1.5" />
                         <span className="bg-[#14A700] w-[15px] h-[15px]  absolute right-[-4px] top-[-4px] rounded-full border-2 border-white"></span>
                         {/* Set the profile image here */}
-                        <img className="h-full w-full rounded-lg " src={profileData.image || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"} alt="Profile" />
+                        <img
+                          className="h-full w-full rounded-lg "
+                          src={
+                            profileData.image ||
+                            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          }
+                          alt="Profile"
+                        />
                       </div>
                       <div>
                         <div className="flex justify-between items-center">
-                        <h5 className="text-sm text-[#151D48] font-medium">{profileData.name || "Shahzad Ali"}</h5>
+                          <h5 className="text-sm text-[#151D48] font-medium">
+                            {profileData.name || "Shahzad Ali"}
+                          </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
-                        <p className=" text-xs text-[#737791] font-normal">{profileData.title || "Blockchain developer"}</p>
+                        <p className=" text-xs text-[#737791] font-normal">
+                          {profileData.title || "Blockchain developer"}
+                        </p>
                       </div>
                     </Menu.Button>
                   </div>

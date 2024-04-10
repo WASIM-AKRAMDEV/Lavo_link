@@ -5,8 +5,13 @@ import { VscLink } from "react-icons/vsc";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiCloudUpload } from "react-icons/gi";
-import { initializeApp} from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  updateDoc,
+} from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -28,8 +33,8 @@ const storage = getStorage(app);
 
 const Prosidebar = () => {
   const [editMode, setEditMode] = useState(false);
-  const [profileName, setProfileName] = useState("Shahzad");
-  const [profileTitle, setProfileTitle] = useState("Blockchain Developer");
+  const [profileName, setProfileName] = useState();
+  const [profileTitle, setProfileTitle] = useState();
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
   const [newText, setNewText] = useState("");
@@ -70,19 +75,19 @@ const Prosidebar = () => {
     await uploadBytes(imageRef, selectedImage);
 
     // Save profile data to Firestore
-    await addDoc(collection(db, "profiles"), {
+    await updateDoc(collection(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
       profileName,
       profileTitle,
-      imageUrl: `profile_images/${selectedImage.name}`,
+      imageUrl: `profile_images/${selectedImage?.name}`,
     });
 
     console.log("Profile data uploaded to Firestore!");
   };
-  
+
   return (
     <div className="w-[23%]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
-      <div className="flex justify-end items-center mb-3"  >
+        <div className="flex justify-end items-center mb-3">
           <div className="absolute right-12 top-3 ">
             <label
               htmlFor="image-upload"
@@ -103,7 +108,10 @@ const Prosidebar = () => {
             className="bg-transparent border-none text-[#5D5FEF] text-sm"
           >
             {editMode ? (
-              <FiPlusCircle className="text-[#737791] text-xl absolute right-6 top-3" onClick={saveProfileDataToFirestore} />
+              <FiPlusCircle
+                className="text-[#737791] text-xl absolute right-6 top-3"
+                onClick={saveProfileDataToFirestore}
+              />
             ) : (
               <TbEdit className="text-[#737791] text-xl absolute right-6 top-3" />
             )}
@@ -293,7 +301,6 @@ const Prosidebar = () => {
           ))}
         </ul>
       </div>
-     
     </div>
   );
 };
