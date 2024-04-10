@@ -134,13 +134,13 @@ const handleSubmit = async (event) => {
         </div>
         <div className="mt-3">
           <ul className="bg-[#f9fafb] px-10 py-3 flex">
-            <li className="border border-[#E7E7E7] text-[#737791] text-base font-medium px-3 py-1 ms-5">
+            <li className="border border-[#E7E7E7] bg-[#151D48] text-white text-base font-medium px-3 py-1 ms-5">
               Job Position
             </li>
-            <li className="border border-[#E7E7E7] text-[#737791] text-base font-medium px-3 py-1 ms-48">
+            <li className="border border-[#E7E7E7] bg-[#151D48] text-white text-base font-medium px-3 py-1 ms-48">
               Company
             </li>
-            <li className="border border-[#E7E7E7] text-[#737791] text-base font-medium px-3 py-1 ms-48">
+            <li className="border border-[#E7E7E7] bg-[#151D48] text-white text-base font-medium px-3 py-1 ms-48">
               Location
             </li>
           </ul>

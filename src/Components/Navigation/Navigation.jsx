@@ -17,6 +17,7 @@ import FirstPage from "../../Pages/FirstPage";
 import SecondPage from "../../Pages/SecondPage";
 import ThirdPage from "../../Pages/ThirdPage";
 import MessageLayout from "../MessageLayout/MessageLayout";
+import YourOrders from "../../Pages/Yourorder";
 
 const Navigation = () => {
   return (
@@ -36,6 +37,8 @@ const Navigation = () => {
             <Route path="/gigdetail/:gigId" element={<GigDetail />} />
             <Route path="/postjobs" element={<PostJobs />} />
             <Route path="/gigupload" element={<GigUpload />} />
+            <Route path="/Yourorder" element={<YourOrders/>} />
+
           </Route>
           <Route path="/messages/" element={<MessageLayout/>}>
             <Route path="firstPage" element={<FirstPage />} />

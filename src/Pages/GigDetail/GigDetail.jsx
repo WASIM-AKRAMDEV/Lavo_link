@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, doc } from "firebase/firestore";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Tab } from "@headlessui/react";
 import { MdOutlineDoubleArrow } from "react-icons/md";
 import { TailSpin } from 'react-loader-spinner';
+import { OrderContext } from "../../Context/Order";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -25,6 +26,7 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const GigDetail = () => {
+  const {OrdersData,setOrdersData}=useContext(OrderContext)
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const serviceDetails = [
@@ -64,7 +66,14 @@ const GigDetail = () => {
   ];
   const { gigId } = useParams();
   const [gigData, setGigData] = useState(null);
+  const orders=[]
+  const orderHandler=()=>{
+    orders.push(gigData)
+    setOrdersData(orders)
+    console.log("Order Data",OrdersData)
+    console.log("Orders",orders)
 
+  }
   useEffect(() => {
     const fetchDataByID = async (id) => {
       try {
@@ -193,7 +202,7 @@ const GigDetail = () => {
                 ))}
               </ul>
 
-              <button className="bg-[#5D5FEF] rounded-lg text-white text-sm px-4 py-2 mt-10">
+              <button onClick={()=>orderHandler()} className="bg-[#5D5FEF] rounded-lg text-white text-sm px-4 py-2 mt-10">
                 Continue with $30
               </button>
             </Tab.Panel>

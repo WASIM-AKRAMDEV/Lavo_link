@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+p{
+    font-family: "Montserrat", sans-serif;
+}
+@font-face {
+    font-family: "Montreal";
+    src: url(../../../public/assets/fonts//Montreal\ Light.ttf);
+}
+h5{
+    font-family: "Montreal";
+}

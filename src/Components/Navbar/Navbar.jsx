@@ -43,6 +43,8 @@ const navigation = [
   { name: "Order", current: false, path: "/order" },
   { name: "Post Jobs", current: false, path: "/postjobs" },
   { name: "Messages", current: false, path: "/messages/firstPage" },
+  { name: "Your Orders", current: false, path: "/Yourorder" },
+
 ];
 
 function classNames(...classes) {
@@ -132,7 +134,7 @@ const Navbar = () => {
               </div>
               <div className="flex flex-1 lg:items-center lg:justify-center sm:items-stretch sm:justify-start justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <a href="#" className="font-semibold text-[#151D48] w-40">
+                  <a href="#" className="font-semibold text-[#151D48] w-32">
                     <img src="/assets/images/lavolink-logo.png" alt="" />
                   </a>
                 </div>
