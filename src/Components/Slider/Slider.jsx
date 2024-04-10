@@ -17,8 +17,8 @@ const Slider = () => {
       modules={[Autoplay, Pagination]}
       className="mySwiper"
     >
-      <SwiperSlide>
-        <img src="./assets/images/1.png" alt="" />
+      <SwiperSlide className='bg-[url(/public/assets/images/1.png)]'>
+        {/* <img src="./assets/images/1.png" alt="" /> */}
       </SwiperSlide>
       <SwiperSlide>
         <img src="./assets/images/2.png" alt="" />

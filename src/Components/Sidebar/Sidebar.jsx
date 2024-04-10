@@ -221,7 +221,7 @@ const Sidebar = () => {
       </div>
       <div className="w-full bg-[url(/public/assets/images/Background.png)] bg-no-repeat h-[259px] bg-cover flex justify-center items-center mt-3">
         <div className="w-[210.19px] flex flex-col justify-center items-center gap-3">
-          <img src={`./assets/images/logo.svg`} alt="" />
+          <img src={`/public/assets/images/logo.svg`}  alt="" />
           <h3 className="text-lg font-semibold text-white">Livolink Pro</h3>
           <p className="text-xs text-white text-center">
             Get access to all features on our Platform
