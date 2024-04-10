@@ -178,7 +178,7 @@ const FindWork = () => {
      <Slider/>
       {/* Swiper end */}
 
-      <div className="my-10 mx-auto px-2 sm:px-2 lg:px-2 max-w-[1550px] flex justify-between">
+      <div className="my-10 mx-auto px-2 sm:px-2 lg:px-2 max-w-[1550px] flex xl:gap-4 2xl:gap-12">
         {/* Sidebar start */}
         <Sidebar />
         {/* Sidebar end*/}

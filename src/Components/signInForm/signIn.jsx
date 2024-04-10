@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { provider } from "../../FirebaseConfig"; 
+import { provider } from "../../FirebaseConfig";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -118,14 +118,19 @@ const SignIn = () => {
   return (
     <section className="flex w-full">
       <div className="flex justify-center items-center w-full">
-        <form className="text-center px-[70px] max-sm:px-[60px]" onSubmit={handleSubmit}>
-          <h2 className="capitalize text-[#221d59] text-[24px] leading-[56px] font-semibold max-lg:text-[20px]  max-lg:leading-[46px]">
-            lavolink
-          </h2>
-          <h4 className="capitalize text-[#221d59] text-[70px] leading-[98px] font-semibold max-lg:text-[60px] max-lg:leading-[90px] max-md:text-[50px] max-md:leading-[80px] max-sm:text-[40px] max-sm:leading-[70px]">
+        <form
+          className="text-center px-[70px] max-sm:px-[60px]"
+          onSubmit={handleSubmit}
+        >
+          <div className="w-full flex items-center justify-center ">
+            <a href="#" className="font-semibold text-[#151D48] w-32">
+              <img src="../assets/images/lavolink-logo.png" alt="" />
+            </a>
+          </div>
+          <h4 className="capitalize text-[#221d59] text-6xl leading-[98px] font-semibold max-lg:text-[60px] max-lg:leading-[90px] max-md:text-[50px] max-md:leading-[80px] max-sm:text-[40px] max-sm:leading-[70px]">
             hello
           </h4>
-          <p className="capitalize text-[#221d59] text-[16px] leading-[22.5px] font-semibold text-center max-lg:text-[12px] max-md:text-[14px] max-sm:text-[12px]">
+          <p className="capitalize text-[#221d59] text-sm leading-[22.5px] font-normal text-center max-lg:text-[12px] max-md:text-[14px] max-sm:text-[12px]">
             Login page design should be easy to understand and require no
             thought from the user. Here are 20 to see what login pages users
             love, and how you can get there!Login page design should be easy to
@@ -226,7 +231,11 @@ const SignIn = () => {
         </form>
       </div>
       <div className="w-full max-md:hidden">
-        <img className="w-full h-full" src="./assets/images/image1.png" alt="" />
+        <img
+          className="w-full h-full"
+          src="./assets/images/image1.png"
+          alt=""
+        />
       </div>
     </section>
   );

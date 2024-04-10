@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
 import { provider } from "../../FirebaseConfig"; // Make sure you have FirebaseConfig properly set up
@@ -7,7 +12,7 @@ import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  
+
   const [errors, setErrors] = useState({ email: null, password: null }); // State to hold error messages
 
   useEffect(() => {
@@ -36,7 +41,11 @@ const SignUp = () => {
         if (error.code === "auth/invalid-credential") {
           setErrors({ ...errors, email: "Invalid Email", password: null });
         } else if (error.code === "auth/weak-password") {
-          setErrors({ ...errors, password: "Password should be at least 6 characters", email: null });
+          setErrors({
+            ...errors,
+            password: "Password should be at least 6 characters",
+            email: null,
+          });
         } else {
           // Handle other types of errors if needed
           console.error("Firebase error:", error);
@@ -55,15 +64,19 @@ const SignUp = () => {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-        console.log(token,user)
+        console.log(token, user);
         localStorage.setItem("log in", true);
         navigate("/");
-      }).catch((error) => {
+      })
+      .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           setErrors({ ...errors, email: "Email already in use" });
         }
         if (error.code === "auth/weak-password") {
-          setErrors({ ...errors, password: "Password should be at least 6 characters" });
+          setErrors({
+            ...errors,
+            password: "Password should be at least 6 characters",
+          });
         }
       });
   };
@@ -97,17 +110,26 @@ const SignUp = () => {
     <>
       <section className="flex w-full">
         <div className="w-full max-lg:hidden">
-          <img className="w-full h-full" src="./assets/images/image1.png" alt="" />
+          <img
+            className="w-full h-full"
+            src="./assets/images/image1.png"
+            alt=""
+          />
         </div>
         <div className="flex justify-center items-center w-full">
-          <form className="text-center px-[70px] max-md:text-center " onSubmit={handleSubmit}>
-            <h2 className="capitalize text-[#221d59] text-[24px] leading-[56px] font-semibold">
-              lavolink
-            </h2>
-            <h4 className="capitalize text-[#221d59] text-[70px] leading-[98px] font-semibold max-xl:text-[60px]  max-md:text-[44px] max-sm:text-[30px]">
+          <form
+            className="text-center px-[70px] max-md:text-center "
+            onSubmit={handleSubmit}
+          >
+            <div className="w-full flex items-center justify-center ">
+            <a href="#" className="font-semibold text-[#151D48] w-32">
+              <img src="../assets/images/lavolink-logo.png" alt="" />
+            </a>
+            </div>
+            <h4 className="capitalize text-[#221d59] text-6xl leading-[98px] font-semibold max-lg:text-[60px] max-lg:leading-[90px] max-md:text-[50px] max-md:leading-[80px] max-sm:text-[40px] max-sm:leading-[70px]">
               Welcome Back
             </h4>
-            <p className="capitalize text-[#221d59] text-[16px] leading-[22.5px] font-semibold text-center  max-md:text-[14px]">
+            <p className="capitalize text-[#221d59] text-sm leading-[22.5px] font-normal text-center  max-md:text-[14px]">
               Login page design should be easy to understand and require no
               thought from the user.
             </p>
@@ -120,10 +142,16 @@ const SignUp = () => {
                 onBlur={handleBlur}
                 className="border-2 border-black-600 mt-10 rounded-md w-full py-4 px-2 text-sm focus:border-[#6750a4] outline-none focus:outline-none"
               />
-              <span className={`absolute top-8 left-4 bg-white px-2 text-sm ${isFocused ? 'text-[#6750a4]' : 'text-black'}`}>
+              <span
+                className={`absolute top-8 left-4 bg-white px-2 text-sm ${
+                  isFocused ? "text-[#6750a4]" : "text-black"
+                }`}
+              >
                 Email
               </span>
-              <p className="text-red-500 text-sm text-start pt-1">{errors.email}</p>
+              <p className="text-red-500 text-sm text-start pt-1">
+                {errors.email}
+              </p>
             </div>
 
             <div className="relative">
@@ -148,7 +176,9 @@ const SignUp = () => {
               >
                 Password
               </span>
-              <p className="text-red-500 text-sm text-start pt-1">{errors.password}</p>
+              <p className="text-red-500 text-sm text-start pt-1">
+                {errors.password}
+              </p>
             </div>
             <div className="flex justify-between mt-1 max-sm:block">
               <p className="capitalize text-[12px] leading-[24px] font-normal tracking-[0.5px] max-sm:order-2 ">
@@ -171,7 +201,10 @@ const SignUp = () => {
               LOGIN
             </button>
             <p className="py-6">OR</p>
-            <div onClick={signInwithGoogle} className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 mb-5 cursor-pointer">
+            <div
+              onClick={signInwithGoogle}
+              className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 mb-5 cursor-pointer"
+            >
               <img src="./assets/googleIcon.svg" alt="" />
               <span className="capitalize pl-6 mt-2">continue with google</span>
             </div>
@@ -193,4 +226,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-

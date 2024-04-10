@@ -5,6 +5,26 @@ import { VscLink } from "react-icons/vsc";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiCloudUpload } from "react-icons/gi";
+import { initializeApp} from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import "firebase/compat/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
+  authDomain: "signuplogin-e03e9.firebaseapp.com",
+  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
+  projectId: "signuplogin-e03e9",
+  storageBucket: "signuplogin-e03e9.appspot.com",
+  messagingSenderId: "675718779196",
+  appId: "1:675718779196:web:3951e5694ceb8887180e39",
+  measurementId: "G-KCGENMV7J1",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
 const Prosidebar = () => {
   const [editMode, setEditMode] = useState(false);
@@ -44,10 +64,25 @@ const Prosidebar = () => {
     const imageFile = event.target.files[0];
     setSelectedImage(imageFile);
   };
+  const saveProfileDataToFirestore = async () => {
+    // Upload image to Firebase Storage
+    const imageRef = ref(storage, `profile_images/${selectedImage.name}`);
+    await uploadBytes(imageRef, selectedImage);
+
+    // Save profile data to Firestore
+    await addDoc(collection(db, "profiles"), {
+      profileName,
+      profileTitle,
+      imageUrl: `profile_images/${selectedImage.name}`,
+    });
+
+    console.log("Profile data uploaded to Firestore!");
+  };
+  
   return (
-    <div className="w-[345px]">
+    <div className="w-[23%]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
-      <div className="flex justify-end items-center mb-3">
+      <div className="flex justify-end items-center mb-3"  >
           <div className="absolute right-12 top-3 ">
             <label
               htmlFor="image-upload"
@@ -68,7 +103,7 @@ const Prosidebar = () => {
             className="bg-transparent border-none text-[#5D5FEF] text-sm"
           >
             {editMode ? (
-              <FiPlusCircle className="text-[#737791] text-xl absolute right-6 top-3" />
+              <FiPlusCircle className="text-[#737791] text-xl absolute right-6 top-3" onClick={saveProfileDataToFirestore} />
             ) : (
               <TbEdit className="text-[#737791] text-xl absolute right-6 top-3" />
             )}
@@ -83,8 +118,7 @@ const Prosidebar = () => {
                   : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
               }
               alt=""
-              width="100%"
-              height="100%"
+              className="w-full h-full"
             />
           </div>
           <div>
@@ -94,19 +128,19 @@ const Prosidebar = () => {
                   type="text"
                   value={profileName}
                   onChange={(e) => setProfileName(e.target.value)}
-                  className="text-3xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
+                  className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
                 profileName
               )}
             </h3>
-            <p className="text-base">
+            <p className="text-xs">
               {editMode ? (
                 <input
                   type="text"
                   value={profileTitle}
                   onChange={(e) => setProfileTitle(e.target.value)}
-                  className="text-base outline-none border-none bg-transparent"
+                  className="text-xs outline-none border-none bg-transparent"
                 />
               ) : (
                 profileTitle

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
+import { collection, getDocs, doc , getDoc } from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineSettings } from "react-icons/md";
 import { GiWallet } from "react-icons/gi";
-
 import { PiSignOutBold } from "react-icons/pi";
 import { Link, NavLink } from "react-router-dom";
 import { ethers } from "ethers";
@@ -14,6 +14,23 @@ import { signOut } from "firebase/auth";
 import { database } from "../../FirebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
+  authDomain: "signuplogin-e03e9.firebaseapp.com",
+  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
+  projectId: "signuplogin-e03e9",
+  storageBucket: "signuplogin-e03e9.appspot.com",
+  messagingSenderId: "675718779196",
+  appId: "1:675718779196:web:3951e5694ceb8887180e39",
+  measurementId: "G-KCGENMV7J1",
+};
+
+const app = initializeApp(firebaseConfig);
+export const firestore = getFirestore(app);
 
 const navigation = [
   { name: "Find Work", current: true, path: "/" },
@@ -34,6 +51,11 @@ function classNames(...classes) {
 
 const Navbar = () => {
   const [walletAddress, setWalletAddress] = useState();
+  const [profileData, setProfileData] = useState({
+    imageUrl: "",
+    profileName: "Shahzad Ali",
+    profileTitle: "Blockchain Developer",
+  });
   const location = useLocation();
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -52,6 +74,27 @@ const Navbar = () => {
     setWalletAddress(localStorage.getItem("wallAddr"));
   }, [localStorage.getItem("wallAddr")]);
   const navigate = useNavigate();
+
+ // Profile data fetch
+ useEffect(() => {
+  const fetchProfileData = async () => {
+    try {
+      const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
+      if (userId) {
+        const profileDocRef = doc(firestore, "profiles", userId);
+        const docSnapshot = await getDoc(profileDocRef);
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setProfileData(data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  fetchProfileData();
+}, []);
 
   const handleLogout = () => {
     signOut(database)
@@ -88,7 +131,7 @@ const Navbar = () => {
               <div className="flex flex-1 lg:items-center lg:justify-center sm:items-stretch sm:justify-start justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <a href="#" className="font-semibold text-[#151D48] w-40">
-                    <img src="./assets/images/lavolink-logo.png" alt="" />
+                    <img src="../assets/images/lavolink-logo.png" alt="" />
                   </a>
                 </div>
                 <div className="hidden lg:ml-2 sm:ml-6 lg:block w-full">
@@ -144,22 +187,15 @@ const Navbar = () => {
                       <div className="relative w-12 h-12  flex rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 ">
                         <span className="absolute -inset-1.5" />
                         <span className="bg-[#14A700] w-[15px] h-[15px]  absolute right-[-4px] top-[-4px] rounded-full border-2 border-white"></span>
-                        <img
-                          className="h-full w-full rounded-lg "
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
+                        {/* Set the profile image here */}
+                        <img className="h-full w-full rounded-lg " src={profileData.image || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"} alt="Profile" />
                       </div>
                       <div>
                         <div className="flex justify-between items-center">
-                          <h5 className="text-sm text-[#151D48] font-medium">
-                            Shahzad Ali
-                          </h5>
+                        <h5 className="text-sm text-[#151D48] font-medium">{profileData.name || "Shahzad Ali"}</h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
-                        <p className=" text-xs text-[#737791] font-normal">
-                          Blockchain developer
-                        </p>
+                        <p className=" text-xs text-[#737791] font-normal">{profileData.title || "Blockchain developer"}</p>
                       </div>
                     </Menu.Button>
                   </div>

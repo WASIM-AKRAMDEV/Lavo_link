@@ -99,8 +99,8 @@ const Profile = () => {
   return (
     <div className="">
       <Slider />
-      <div className="my-10 mx-auto px-2 sm:px-2 lg:px-2 max-w-[1550px] flex justify-between">
-        <Prosidebar />
+      <div className="my-10 mx-auto px-2 sm:px-2 lg:px-2 max-w-[1550px] flex xl:gap-4 2xl:gap-12">
+        <Prosidebar  />
         <div className="max-w-[1100px] w-full">
           <div className="w-full border-b border-[#E7E7E7] pb-5">
             <div className="text-[#151D48] w-[80%]">

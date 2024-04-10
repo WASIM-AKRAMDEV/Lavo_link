@@ -32,12 +32,11 @@ const Navigation = () => {
             <Route path="/order" element={<Order />} />
             <Route path="/myearning" element={<MyEarning />} />
             <Route path="/messages" element={<Messages />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile/>} />
             <Route path="/gigdetail/:gigId" element={<GigDetail />} />
             <Route path="/postjobs" element={<PostJobs />} />
             <Route path="/gigupload" element={<GigUpload />} />
           </Route>
-
           <Route path="/messages/" element={<MessageLayout/>}>
             <Route path="firstPage" element={<FirstPage />} />
             <Route path="secondPage" element={<SecondPage />} />

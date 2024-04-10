@@ -43,7 +43,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-[345px]">
+    <div className="w-[23%]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
         <div className="flex justify-end items-center mb-3">
           <div className="absolute right-12 top-3 ">
@@ -81,30 +81,29 @@ const Sidebar = () => {
                   : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
               }
               alt=""
-              width="100%"
-              height="100%"
+              className="w-full h-full"
             />
           </div>
           <div>
-            <h3 className="text-2xl font-semibold text-[#151D48]">
+            <h3 className="text-xl font-semibold text-[#151D48]">
               {editMode ? (
                 <input
                   type="text"
                   value={profileName}
                   onChange={(e) => setProfileName(e.target.value)}
-                  className="text-3xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
+                  className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
                 profileName
               )}
             </h3>
-            <p className="text-base">
+            <p className="text-xs">
               {editMode ? (
                 <input
                   type="text"
                   value={profileTitle}
                   onChange={(e) => setProfileTitle(e.target.value)}
-                  className="text-base outline-none border-none bg-transparent"
+                  className="text-xs outline-none border-none bg-transparent"
                 />
               ) : (
                 profileTitle
