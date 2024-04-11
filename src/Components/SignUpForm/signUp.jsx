@@ -123,7 +123,7 @@ const SignUp = () => {
           >
             <div className="w-full flex items-center justify-center ">
             <a href="#" className="font-semibold text-[#151D48] w-32">
-              <img src="../assets/images/lavolink-logo.png" alt="" />
+              <img src="/assets/images/Lavolink-logo.png" alt="" />
             </a>
             </div>
             <h4 className="capitalize text-[#221d59] text-6xl leading-[98px] font-semibold max-lg:text-[60px] max-lg:leading-[90px] max-md:text-[50px] max-md:leading-[80px] max-sm:text-[40px] max-sm:leading-[70px]">

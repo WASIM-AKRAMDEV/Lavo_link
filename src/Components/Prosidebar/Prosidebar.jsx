@@ -6,14 +6,10 @@ import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiCloudUpload } from "react-icons/gi";
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { getFirestore, updateDoc, doc } from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import ProImageUploader from "../ProImageUploader/ProImageUploader";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -26,15 +22,14 @@ const firebaseConfig = {
   appId: "1:675718779196:web:3951e5694ceb8887180e39",
   measurementId: "G-KCGENMV7J1",
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
 const Prosidebar = () => {
   const [editMode, setEditMode] = useState(false);
-  const [profileName, setProfileName] = useState();
-  const [profileTitle, setProfileTitle] = useState();
+  const [profileName, setProfileName] = useState("Shahzad Ali");
+  const [profileTitle, setProfileTitle] = useState("Blockchain dev");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
   const [newText, setNewText] = useState("");
@@ -63,46 +58,38 @@ const Prosidebar = () => {
     updatedTexts.splice(index, 1);
     setAdditionalTexts(updatedTexts);
   };
+
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageUpload = (event) => {
-    const imageFile = event.target.files[0];
-    setSelectedImage(imageFile);
-  };
-  const saveProfileDataToFirestore = async () => {
+  const handleImageUpload = (url) => {
+    saveProfileDataToFirestore(url);
+    console.log("Url is add to profiles" ,url)
+  }; 
+
+  const saveProfileDataToFirestore = async (url) => {
     // Upload image to Firebase Storage
     const imageRef = ref(storage, `profile_images/${selectedImage.name}`);
     await uploadBytes(imageRef, selectedImage);
-
     // Save profile data to Firestore
-    await updateDoc(collection(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
-      profileName,
-      profileTitle,
-      imageUrl: `profile_images/${selectedImage?.name}`,
+    await updateDoc(doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
+      profileName: profileName,
+      profileTitle: profileTitle,
+      imageUrl: `${url}`,
     });
-
+    console.log(url)
     console.log("Profile data uploaded to Firestore!");
+  };
+  const getFormattedProfileName = (name) => {
+    const words = name.split(" ");
+    const firstName = words[0];
+    const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
+    return `${firstName} ${lastNameInitial}`;
   };
 
   return (
     <div className="w-[23%]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
         <div className="flex justify-end items-center mb-3">
-          <div className="absolute right-12 top-3 ">
-            <label
-              htmlFor="image-upload"
-              className="text-sm text-[#737791] cursor-pointer"
-            >
-              <GiCloudUpload className="text-xl" />
-            </label>
-            <input
-              type="file"
-              id="image-upload"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
-          </div>
           <button
             onClick={() => setEditMode(!editMode)}
             className="bg-transparent border-none text-[#5D5FEF] text-sm"
@@ -117,19 +104,15 @@ const Prosidebar = () => {
             )}
           </button>
         </div>
-        <div className="flex gap-3 items-center">
-          <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
-            <img
-              src={
-                selectedImage
-                  ? URL.createObjectURL(selectedImage)
-                  : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
-              alt=""
-              className="w-full h-full"
-            />
-          </div>
+        <div className="flex gap-3 items-center relative">
+          <ProImageUploader
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+            onImageUpload={handleImageUpload}
+          />
+
           <div>
+            
             <h3 className="text-2xl font-semibold text-[#151D48]">
               {editMode ? (
                 <input
@@ -139,7 +122,7 @@ const Prosidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileName
+               getFormattedProfileName(profileName)
               )}
             </h3>
             <p className="text-xs">
@@ -223,8 +206,7 @@ const Prosidebar = () => {
                 </>
               ) : (
                 <>
-                  {text}
-                  <VscLink className="text-lg text-[#737791]" />
+                  {text} <VscLink className="text-lg text-[#737791]" />
                 </>
               )}
             </li>
@@ -247,10 +229,9 @@ const Prosidebar = () => {
           )}
         </ul>
       </div>
-
       <div className="bg-[#f9fafb] px-10 py-4 rounded-[19px] mt-3 relative">
         <ul className="p-0">
-          <li className="text-sm text-[#737791]  my-3">
+          <li className="text-sm text-[#737791] my-3">
             {editMode ? (
               <input
                 type="text"

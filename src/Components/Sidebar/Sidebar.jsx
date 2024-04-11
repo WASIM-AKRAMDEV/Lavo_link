@@ -35,32 +35,18 @@ const Sidebar = () => {
     updatedTexts.splice(index, 1);
     setAdditionalTexts(updatedTexts);
   };
-  const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageUpload = (event) => {
-    const imageFile = event.target.files[0];
-    setSelectedImage(imageFile);
+  const getFormattedProfileName = (name) => {
+    const words = name.split(" ");
+    const firstName = words[0];
+    const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
+    return `${firstName} ${lastNameInitial}`;
   };
 
   return (
     <div className="w-[23%]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
         <div className="flex justify-end items-center mb-3">
-          <div className="absolute right-12 top-3 ">
-            <label
-              htmlFor="image-upload"
-              className="text-sm text-[#737791] cursor-pointer"
-            >
-              <GiCloudUpload className="text-xl" />
-            </label>
-            <input
-              type="file"
-              id="image-upload"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
-          </div>
           <button
             onClick={() => setEditMode(!editMode)}
             className="bg-transparent border-none text-[#5D5FEF] text-sm"
@@ -76,9 +62,7 @@ const Sidebar = () => {
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
               src={
-                selectedImage
-                  ? URL.createObjectURL(selectedImage)
-                  : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
               }
               alt=""
               className="w-full h-full"
@@ -219,9 +203,9 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
-      <div className="w-full bg-[url(/public/assets/images/Background.png)] bg-no-repeat h-[259px] bg-cover flex justify-center items-center mt-3">
+      <div className="w-full bg-[url(/public/assets/images/Background.png)] bg-no-repeat h-[260px] pb-5  ounded-s-md bg-cover flex justify-center items-center mt-3">
         <div className="w-[210.19px] flex flex-col justify-center items-center gap-3">
-          <img src={`/assets/images/logo.svg`}  alt="" />
+          <img src={`/assets/images/logo.svg`} alt="" />
           <h3 className="text-lg font-semibold text-white">Livolink Pro</h3>
           <p className="text-xs text-white text-center">
             Get access to all features on our Platform

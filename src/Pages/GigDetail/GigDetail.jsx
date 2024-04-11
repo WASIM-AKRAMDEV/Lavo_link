@@ -9,7 +9,8 @@ import { Tab } from "@headlessui/react";
 import { MdOutlineDoubleArrow } from "react-icons/md";
 import { TailSpin } from 'react-loader-spinner';
 import { OrderContext } from "../../Context/Order";
-
+import { ethers } from "ethers";
+import abi from '../../Contract/abi/abi.json'
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
@@ -24,9 +25,23 @@ const firebaseConfig = {
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
-
 const GigDetail = () => {
   const {OrdersData,setOrdersData}=useContext(OrderContext)
+  let orders;
+
+  const initializePaymentHandler=async()=>{
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract=new ethers.Contract("0xB5CACb6aC2A321710AeececC0Fb40625b404F646",abi,signer)
+    const payment=ethers.parseEther("0.0085")
+    await contract.initializePayment(payment,{value:payment})
+    orders=OrdersData
+    orders.push(gigData)
+    setOrdersData(orders)
+    console.log("Order Data",OrdersData)
+    console.log("Orders",orders)
+    
+  }
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const serviceDetails = [
@@ -66,14 +81,8 @@ const GigDetail = () => {
   ];
   const { gigId } = useParams();
   const [gigData, setGigData] = useState(null);
-  const orders=[]
-  const orderHandler=()=>{
-    orders.push(gigData)
-    setOrdersData(orders)
-    console.log("Order Data",OrdersData)
-    console.log("Orders",orders)
 
-  }
+  
   useEffect(() => {
     const fetchDataByID = async (id) => {
       try {
@@ -202,7 +211,7 @@ const GigDetail = () => {
                 ))}
               </ul>
 
-              <button onClick={()=>orderHandler()} className="bg-[#5D5FEF] rounded-lg text-white text-sm px-4 py-2 mt-10">
+              <button onClick={()=>initializePaymentHandler()} className="bg-[#5D5FEF] rounded-lg text-white text-sm px-4 py-2 mt-10">
                 Continue with $30
               </button>
             </Tab.Panel>

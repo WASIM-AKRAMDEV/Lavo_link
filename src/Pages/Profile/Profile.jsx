@@ -71,7 +71,7 @@ const Profile = () => {
           ...doc.data(),
         }));
         setGigData(data);
-        console.log("Data",data)
+     
         setLoading(false);
       } catch (error) {
         console.error("Error fetching gig data:", error);

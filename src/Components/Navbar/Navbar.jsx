@@ -135,7 +135,7 @@ const Navbar = () => {
               <div className="flex flex-1 lg:items-center lg:justify-center sm:items-stretch sm:justify-start justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <a href="#" className="font-semibold text-[#151D48] w-32">
-                    <img src="/assets/images/lavolink-logo.png" alt="" />
+                    <img src="/assets/images/Lavolink-logo.png" alt="" />
                   </a>
                 </div>
                 <div className="hidden lg:ml-2 sm:ml-6 lg:block w-full">
@@ -169,7 +169,7 @@ const Navbar = () => {
                     type="text"
                     name="price"
                     id="price"
-                    className="block w-full rounded-md  border-0 py-3 pl-10 xl:pr-44 bg-[#f9fafb] lg:pr-0  ring-gray-300 placeholder:text-[#737791] placeholder:text-base lg:placeholder:text-sm focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md  border-0 py-3 pl-10 xl:pr-36 bg-[#f9fafb] lg:pr-0  ring-gray-300 placeholder:text-[#737791] placeholder:text-base lg:placeholder:text-sm focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     placeholder="Search here..."
                   />
                 </div>
