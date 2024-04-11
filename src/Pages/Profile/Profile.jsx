@@ -179,8 +179,8 @@ const Profile = () => {
               Project Catalogue
             </h2>
             <div className="flex flex-wrap gap-x-5 my-8 ">
-              {gigData.map((gig) => (
-                <div  key={gig.id} className="max-w-[350px] w-full bg-[#f9fafb] rounded-xl overflow-hidden mt-4 shadow-lg">
+              {gigData.map((gig, idx) => (
+                <div  key={idx} className="max-w-[350px] w-full bg-[#f9fafb] rounded-xl overflow-hidden mt-4 shadow-lg">
                   <div className="w-full rounded-xl object-cover h-52">
                     <img src={gig.image} className="rounded-xl w-full h-full" alt=""  />
                   </div>
@@ -191,8 +191,8 @@ const Profile = () => {
                       {gig.title}
                     </h4>
                     <div className="flex gap-3 text-[#737791] text-xs font-light my-3">
-                      {gig?.skills?.map((skill) => (
-                        <p className="w-20 truncate">{skill}</p>
+                      {gig?.skills?.map((skill, idx) => (
+                        <p key={idx} className="w-20 truncate">{skill}</p>
                       ))}
                     </div>
                     <div className="flex gap-4">

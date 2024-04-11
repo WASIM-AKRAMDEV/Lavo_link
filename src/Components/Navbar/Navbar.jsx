@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc ,onSnapshot} from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IoSearch } from "react-icons/io5";
@@ -77,7 +77,6 @@ const Navbar = () => {
   }, [localStorage.getItem("wallAddr")]);
   const navigate = useNavigate();
 
-  // Profile data fetch
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -85,18 +84,24 @@ const Navbar = () => {
         const userId = "k8cqN13B5HM0QFNdxXGO";
         if (userId) {
           const profileDocRef = doc(firestore, "profiles", userId);
-          const docSnapshot = await getDoc(profileDocRef);
-          if (docSnapshot.exists()) {
-            const data = docSnapshot.data();
-            setProfileData(data);
-            console.log(data);
-          }
+          const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
+            if (docSnapshot.exists()) {
+              const data = docSnapshot.data();
+              setProfileData(data);
+              console.log("Data in navbar:", data);
+            } else {
+              console.log("No such document!");
+            }
+          });
+  
+          // Return the unsubscribe function to clean up the listener when the component unmounts
+          return () => unsubscribe();
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     };
-
+  
     fetchProfileData();
   }, []);
 
@@ -193,9 +198,9 @@ const Navbar = () => {
                         <span className="bg-[#14A700] w-[15px] h-[15px]  absolute right-[-4px] top-[-4px] rounded-full border-2 border-white"></span>
                         {/* Set the profile image here */}
                         <img
-                          className="h-full w-full rounded-lg "
+                          className="h-full w-full rounded-full "
                           src={
-                            profileData.image ||
+                            profileData.imageUrl ||
                             "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           }
                           alt="Profile"
@@ -204,12 +209,12 @@ const Navbar = () => {
                       <div>
                         <div className="flex justify-between items-center">
                           <h5 className="text-sm text-[#151D48] font-medium">
-                            {profileData.name || "Shahzad Ali"}
+                            {profileData.profileName || "Shahzad Ali"}
                           </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
                         <p className=" text-xs text-[#737791] font-normal">
-                          {profileData.title || "Blockchain developer"}
+                          {profileData.profileTitle || "Blockchain developer"}
                         </p>
                       </div>
                     </Menu.Button>
@@ -232,14 +237,17 @@ const Navbar = () => {
                           >
                             <img
                               className="h-full w-full rounded-lg "
-                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                              alt=""
+                              src={
+                                profileData.imageUrl ||
+                                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              }
+                              alt="Profile"
                             />
                           </a>
                         )}
                       </Menu.Item>
                       <h5 className="text-[#737791] text-xs my-2">
-                        Shahzad Ali
+                      {profileData.profileName || "Shahzad Ali"}
                       </h5>
                       <div className="flex gap-1 py-2">
                         <button className="bg-[#5D5FEF] text-white font-normal text-sm px-[15px] py-[2px] rounded">

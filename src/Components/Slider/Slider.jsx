@@ -28,23 +28,22 @@ const Slider = () => {
           </p>
           <button className="bg-white text-sm font-normal text-[#151D48] py-[6px] px-4 rounded-2xl mt-8">Learn More</button>
           </div>
-          {/* <img src="./assets/images/1.png" alt="" /> */}
+        
         </SwiperSlide>
         <SwiperSlide className="bg-[url(/public/assets/images/2.png)] bg-cover bg-no-repeat w-full py-40  relative text-white">
         <div className="absolute top-20 left-10 w-[49%]">
-          <h5 className="text-lg my-2 font-light">Wellcome to Lavo link</h5>
+          <h5 className="text-lg my-2 font-light">Wellcome to Lavolink</h5>
           <p className=" text-2xl font-semibold">
           Transform Your Freelance Journey with Lavolink: A Revolutionary
             Platform Built on Blockchain Technology
           </p>
           <button className="bg-white text-sm font-normal text-[#151D48] py-[6px] px-4 rounded-2xl mt-8">Learn More</button>
           </div>
-         
-          {/* <img src="./assets/images/2.png" alt="" /> */}
+        
         </SwiperSlide>
         <SwiperSlide className="bg-[url(/public/assets/images/3.png)]  bg-cover bg-no-repeat w-full py-40  relative text-white">
         <div className="absolute top-20 left-10 w-[49%]">
-          <h5 className="text-lg my-2 font-light">Wellcome to Lavo link</h5>
+          <h5 className="text-lg my-2 font-light">Wellcome to Lavolink</h5>
           <p className=" text-2xl font-semibold">
           Earn While Doing What You Love: Turn your passion into profit by
             offering your services on lavolink
@@ -52,7 +51,7 @@ const Slider = () => {
           <button className="bg-white text-sm font-normal text-[#151D48] py-[6px] px-4 rounded-2xl mt-8">Learn More</button>
           </div>
           
-          {/* <img src="./assets/images/3.png" alt="" /> */}
+      
         </SwiperSlide>
       </Swiper>
       <div className="swiper-pagination mt-4 flex justify-center ">

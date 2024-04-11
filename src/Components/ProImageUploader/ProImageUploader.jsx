@@ -26,9 +26,9 @@ if (!firebase.apps.length) {
 
 const storage = firebase.storage();
 
-const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage }) => {
+const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,proData }) => {
 
-
+  const [uploading, setUploading] = useState(false);
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
@@ -39,6 +39,7 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage }) =>
 
   const handleUpload = () => {
     if (selectedImage) {
+      setUploading(true);
       const uploadTask = storage
         .ref(`images/${selectedImage.name}`)
         .put(selectedImage);
@@ -47,9 +48,11 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage }) =>
         "state_changed",
         (snapshot) => {
           // progress function
+          setUploading(false)
         },
         (error) => {
           console.error(error);
+          setUploading(false);
         },
         () => {
           // complete function
@@ -61,9 +64,11 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage }) =>
               // Call onImageUpload with the URL
               onImageUpload(url);
               console.log("Image URL added to profiles:", url);
+              setUploading(false);
             })
             .catch((error) => {
               console.error("Error getting download URL:", error);
+              setUploading(false);
             });
         }
       );
@@ -72,9 +77,9 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage }) =>
 
   return (
     <div className="flex flex-col relative">
-      {selectedImage &&(
+        {!uploading && selectedImage && (
         <button
-          className="absolute  top-[-25px] right-[30px] text-black text-[10px]"
+          className="absolute top-[-25px] right-[30px] text-black text-[10px]"
           onClick={handleUpload}
         >
           <FaCheck className="text-base" />
@@ -101,10 +106,10 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage }) =>
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
-                  : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  : proData.imageUrl
               }
               alt="Selected"
-              className="w-full h-full bg-cover"
+              className="w-full h-full object-cover"
             />
             {selectedImage && (
               <GiCloudUpload className="text-[9px] text-[#151D48] text-center" />

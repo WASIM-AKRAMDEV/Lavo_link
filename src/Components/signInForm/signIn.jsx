@@ -132,10 +132,7 @@ const SignIn = () => {
           </h4>
           <p className="capitalize text-[#221d59] text-sm leading-[22.5px] font-normal text-center max-lg:text-[12px] max-md:text-[14px] max-sm:text-[12px]">
             Login page design should be easy to understand and require no
-            thought from the user. Here are 20 to see what login pages users
-            love, and how you can get there!Login page design should be easy to
-            understand and require no thought from the user. see what login
-            pages users love.
+            thought from the user.
           </p>
           <div className="relative">
             <input

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
@@ -6,7 +6,7 @@ import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiCloudUpload } from "react-icons/gi";
 import { initializeApp } from "firebase/app";
-import { getFirestore, updateDoc, doc } from "firebase/firestore";
+import { getFirestore, updateDoc, doc ,collection ,getDocs, getDoc } from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ProImageUploader from "../ProImageUploader/ProImageUploader";
@@ -61,11 +61,27 @@ const Prosidebar = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleImageUpload = (url) => {
-    saveProfileDataToFirestore(url);
-    console.log("Url is add to profiles" ,url)
-  }; 
-
+  const [proData, setProData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const db = getFirestore();
+        const ProfileDocRef = doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO");
+        const docSnap = await getDoc(ProfileDocRef);
+        if (docSnap.exists()) {
+          const dataPro = { id: docSnap.id, ...docSnap.data() };
+          setProData(dataPro);
+          console.log("Profile Data:", dataPro);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching Profile data:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
   const saveProfileDataToFirestore = async (url) => {
     // Upload image to Firebase Storage
     const imageRef = ref(storage, `profile_images/${selectedImage.name}`);
@@ -74,11 +90,28 @@ const Prosidebar = () => {
     await updateDoc(doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
       profileName: profileName,
       profileTitle: profileTitle,
-      imageUrl: `${url}`,
     });
     console.log(url)
     console.log("Profile data uploaded to Firestore!");
   };
+
+  const updateImageUrlInFirestore = async (imageUrl) => {
+    // Update image URL in Firestore
+    await updateDoc(doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
+      imageUrl: imageUrl,
+    });
+    console.log("Image URL updated in Firestore!");
+  };
+
+  const handleImageUpload = async (url) => {
+    // Upload image to Firebase Storage
+    const imageRef = ref(storage, `profile_images/${selectedImage.name}`);
+    await uploadBytes(imageRef, selectedImage);
+    // Update image URL in Firestore
+    await updateImageUrlInFirestore(url);
+    console.log("Image uploaded to Firebase Storage and URL updated in Firestore:", url);
+  };
+
   const getFormattedProfileName = (name) => {
     const words = name.split(" ");
     const firstName = words[0];
@@ -109,6 +142,7 @@ const Prosidebar = () => {
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
             onImageUpload={handleImageUpload}
+            proData={proData}
           />
 
           <div>

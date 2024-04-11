@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
@@ -8,6 +8,24 @@ import { Link } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiCloudUpload } from "react-icons/gi";
+import { collection, getDocs, doc, getDoc ,onSnapshot} from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
+  authDomain: "signuplogin-e03e9.firebaseapp.com",
+  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
+  projectId: "signuplogin-e03e9",
+  storageBucket: "signuplogin-e03e9.appspot.com",
+  messagingSenderId: "675718779196",
+  appId: "1:675718779196:web:3951e5694ceb8887180e39",
+  measurementId: "G-KCGENMV7J1",
+};
+
+const app = initializeApp(firebaseConfig);
+export const firestore = getFirestore(app);
 
 const Sidebar = () => {
   const [editMode, setEditMode] = useState(false);
@@ -16,6 +34,11 @@ const Sidebar = () => {
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
   const [newText, setNewText] = useState("");
+  const [profileData, setProfileData] = useState({
+    imageUrl: "",
+    profileName: "Shahzad Ali",
+    profileTitle: "Blockchain Developer",
+  });
   const [additionalTexts, setAdditionalTexts] = useState([
     "Lavolink Academy",
     "Offer Contract",
@@ -35,6 +58,35 @@ const Sidebar = () => {
     updatedTexts.splice(index, 1);
     setAdditionalTexts(updatedTexts);
   };
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        // const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
+        const userId = "k8cqN13B5HM0QFNdxXGO";
+        if (userId) {
+          const profileDocRef = doc(firestore, "profiles", userId);
+          const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
+            if (docSnapshot.exists()) {
+              const data = docSnapshot.data();
+              setProfileData(data);
+              console.log("Data in navbar:", data);
+            } else {
+              console.log("No such document!");
+            }
+          });
+  
+          // Return the unsubscribe function to clean up the listener when the component unmounts
+          return () => unsubscribe();
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+  
+    fetchProfileData();
+  }, []);
+
+
 
   const getFormattedProfileName = (name) => {
     const words = name.split(" ");
@@ -62,7 +114,7 @@ const Sidebar = () => {
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
               src={
-                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                profileData.imageUrl
               }
               alt=""
               className="w-full h-full"
@@ -78,7 +130,7 @@ const Sidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileName
+                profileData.profileName
               )}
             </h3>
             <p className="text-xs">
@@ -90,7 +142,7 @@ const Sidebar = () => {
                   className="text-xs outline-none border-none bg-transparent"
                 />
               ) : (
-                profileTitle
+                profileData.profileTitle
               )}
             </p>
           </div>
@@ -190,12 +242,12 @@ const Sidebar = () => {
         <ul className="p-0">
           <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
             Availability Badge{" "}
-            <RiShieldStarLine className="text-lg text-[#737791]" />
+            <RiShieldStarLine className="text-lg text-[#00aa25]" />
           </li>
           <li className="text-sm text-[#737791] flex items-center gap-2 my-3">
             <Link
               to="/profile"
-              className="text-sm text-[#737791] flex items-center gap-2 my-3"
+              className="text-sm text-[#737791] flex items-center gap-2 my-3 font-bold"
             >
               Project Catalog
               <SlNotebook className="text-lg text-[#737791]" />
@@ -205,8 +257,8 @@ const Sidebar = () => {
       </div>
       <div className="w-full bg-[url(/public/assets/images/Background.png)] bg-no-repeat h-[260px] pb-5  ounded-s-md bg-cover flex justify-center items-center mt-3">
         <div className="w-[210.19px] flex flex-col justify-center items-center gap-3">
-          <img src={`/assets/images/logo.svg`} alt="" />
-          <h3 className="text-lg font-semibold text-white">Livolink Pro</h3>
+          <img src={`./assets/images/Logo.svg`} alt="" />
+          <h3 className="text-lg font-semibold text-white">Lavolink Pro</h3>
           <p className="text-xs text-white text-center">
             Get access to all features on our Platform
           </p>
