@@ -178,24 +178,8 @@ const GigDetail = () => {
               BASIC
               <span className="font-semibold text-base">$30</span>
             </Tab>
-            <Tab
-              className={`px-3 flex flex-col items-center font-medium border-l-2 ${
-                selectedIndex === 1 ? "border-[#151D48]" : "border-white"
-              }`}
-              onClick={() => setSelectedIndex(1)} // Set selectedIndex to 1 when clicked
-            >
-              STANDARD
-              <span className="font-semibold text-base">$40</span>
-            </Tab>
-            <Tab
-              className={`px-3 flex flex-col items-center font-medium border-l-2 ${
-                selectedIndex === 2 ? "border-[#151D48]" : "border-white"
-              }`}
-              onClick={() => setSelectedIndex(2)} // Set selectedIndex to 2 when clicked
-            >
-              ADVANCE
-              <span className="font-semibold text-base">$50</span>
-            </Tab>
+            
+            
           </Tab.List>
           <Tab.Panels>
             <Tab.Panel className="py-10 ">
@@ -215,40 +199,7 @@ const GigDetail = () => {
                 Continue with $30
               </button>
             </Tab.Panel>
-            <Tab.Panel className="py-10">
-              <ul className="w-full list-disc">
-                {serviceDetails.map((item, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between text-sm my-1 font-light"
-                  >
-                    <h5>{item.title}</h5>
-                    <p>{item.valuesec}</p>
-                  </li>
-                ))}
-              </ul>
-
-              <button className="bg-[#5D5FEF] rounded-lg text-white text-sm px-4 py-2 mt-10">
-                Continue with $40
-              </button>
-            </Tab.Panel>
-            <Tab.Panel className="py-10">
-              <ul className="w-full list-disc">
-                {serviceDetails.map((item, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between text-sm my-1 font-light"
-                  >
-                    <h5>{item.title}</h5>
-                    <p>{item.valuethird}</p>
-                  </li>
-                ))}
-              </ul>
-
-              <button className="bg-[#5D5FEF] rounded-lg text-white text-sm px-4 py-2 mt-10">
-                Continue with $50
-              </button>
-            </Tab.Panel>
+            
           </Tab.Panels>
         </Tab.Group>
       </div>
