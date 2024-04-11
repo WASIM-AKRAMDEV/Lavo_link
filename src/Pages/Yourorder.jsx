@@ -21,24 +21,24 @@ const YourOrders=()=>{
     console.log(completeOrders)
     console.log("Orders Data",OrdersData)
     return(
-        <div className="all-orders p-5 h-[70vh]">
+        <div className="all-orders p-5">
           {
             OrdersData.map((item)=>{
               return(
-                <div className="w-[100%]  border-2 shadow-md rounded-lg pb-2 flex ">
-                <div className="image">
-                  <img src={item.image} alt="" width={"50%"} height={"30%"} />
+                <div className="w-[100%]  border-2 shadow-md rounded-lg flex  overflow-hidden mt-4">
+                <div className="w-[30%]">
+                  <img src={item.image} alt="" className="w-full h-full" />
                 </div>
-               <div>
-               <div className="title-price  p-2 ">
-               <h3>{item.title}</h3>
-               <h3>Price:$30</h3>
+               <div className="p-4 w-[70%]">
+               <div className="title-price p-2">
+               <h3 className="text-xl">{item.title}</h3>
+               <h3 className=" font-semibold">Price:$30</h3>
                </div>
-               <div className="description">
+               <div className="description text-base ">
                 <p>{item.description}</p>
                </div>
                  <div className="button flex justify-end p-2">
-                 <button className="bg-sky-600 text[12px] text-white rounded-lg" onClick={()=>{
+                 <button className="bg-sky-600 px-4 py-[6px] text[12px] text-white rounded-lg" onClick={()=>{
                     data.includes(item.title)?console.log(item.title):completeOrder(item.title)
                   }}>{data.includes(item.title)?"Completed":"Complete Order"}</button>
                  </div>
