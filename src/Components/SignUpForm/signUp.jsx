@@ -65,7 +65,7 @@ const SignUp = () => {
         // IdP data available using getAdditionalUserInfo(result)
         // ...
         console.log(token, user);
-        localStorage.setItem("log in", true);
+        localStorage.setItem("loggedIn", true);
         navigate("/");
       })
       .catch((error) => {
