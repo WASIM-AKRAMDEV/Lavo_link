@@ -60,23 +60,13 @@ const SignIn = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        // return{
-        //   uid:user.uid,
-        //   displayName:user.displayName,
-        //   photoURL:user.photoURL,
-        // };
+        
         // IdP data available using getAdditionalUserInfo(result)
         // ...
         console.log(token, user);
         localStorage.setItem("loggedIn", true);
         navigate("/");
-        // Specific ID in the profiles collection
-        // const profileId = "k8cqN13B5HM0QFNdxXGO";
-        // // Update profileName in Firestore at the specific ID
-        // await updateDoc(doc(database, "profiles", profileId), {
-        //   profileName: user.displayName,
-        // });
-        // console.log(updateDoc)
+      
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {

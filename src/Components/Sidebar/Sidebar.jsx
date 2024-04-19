@@ -34,7 +34,7 @@ const Sidebar = () => {
   const [profileTitle, setProfileTitle] = useState("Blockchain Developer");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  const [photourl ,setPhotourl] =useState(null);
+  // const [photourl ,setPhotourl] =useState(null);
   const [newText, setNewText] = useState("");
   const [profileData, setProfileData] = useState({
     imageUrl: "",
@@ -96,7 +96,7 @@ const Sidebar = () => {
 
         console.log("User display name:", user.displayName);
         setProfileName(user.displayName);
-        setPhotourl(user.photoURL)
+        // setPhotourl(user.photoURL)
       }
     });
   }, []);
@@ -123,7 +123,7 @@ const Sidebar = () => {
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
               src={
-                photourl
+                profileData.imageUrl
               }
               alt=""
               className="w-full h-full"

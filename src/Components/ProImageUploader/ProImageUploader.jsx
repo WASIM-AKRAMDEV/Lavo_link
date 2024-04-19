@@ -106,7 +106,7 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,proDa
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
-                  : photourl
+                  : proData.imageURl
 
               }
               alt="Selected"

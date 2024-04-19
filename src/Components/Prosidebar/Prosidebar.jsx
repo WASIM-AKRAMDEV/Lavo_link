@@ -40,7 +40,7 @@ const Prosidebar = () => {
   const [profileTitle, setProfileTitle] = useState("Blockchain dev");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  const [photourl, setPhotourl] = useState(null);
+  // const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [additionalTexts, setAdditionalTexts] = useState([
     "Education",
@@ -137,7 +137,7 @@ const Prosidebar = () => {
       if (user) {
         console.log("User display name:", user.displayName);
         setProfileName(user.displayName);
-        setPhotourl(user.photoURL);
+   
       }
     });
   }, []);

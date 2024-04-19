@@ -60,7 +60,7 @@ const Navbar = () => {
     profileTitle: "Blockchain Developer",
   });
   const [profileName, setProfileName] = useState(null);
-  const [photourl, setPhotourl] = useState(null);
+  // const [photourl, setPhotourl] = useState(null);
   const location = useLocation();
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -126,7 +126,7 @@ const Navbar = () => {
       if (user) {
         console.log("User display name:", user.displayName);
         setProfileName(user.displayName);
-        setPhotourl(user.photoURL);
+        // setPhotourl(user.photoURL);
       }
     });
   }, []);
@@ -214,7 +214,7 @@ const Navbar = () => {
                         <img
                           className="h-full w-full rounded-full "
                           src={
-                           photourl
+                             profileData.imageUrl
                           }
                           alt="Profile"
                         />
@@ -251,7 +251,7 @@ const Navbar = () => {
                             <img
                               className="h-full w-full rounded-lg "
                               src={
-                               photourl
+                             profileData.imageUrl
                               }
                               alt="Profile"
                             />
