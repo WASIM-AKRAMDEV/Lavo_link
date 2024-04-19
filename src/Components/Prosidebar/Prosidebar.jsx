@@ -166,7 +166,7 @@ const Prosidebar = () => {
             setSelectedImage={setSelectedImage}
             onImageUpload={handleImageUpload}
             proData={proData}
-            photourl={photourl}
+          
           />
 
           <div>
