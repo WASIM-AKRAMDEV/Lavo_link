@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
@@ -6,10 +6,18 @@ import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiCloudUpload } from "react-icons/gi";
 import { initializeApp } from "firebase/app";
-import { getFirestore, updateDoc, doc ,collection ,getDocs, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  updateDoc,
+  doc,
+  collection,
+  getDocs,
+  getDoc,
+} from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ProImageUploader from "../ProImageUploader/ProImageUploader";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -28,10 +36,11 @@ const storage = getStorage(app);
 
 const Prosidebar = () => {
   const [editMode, setEditMode] = useState(false);
-  const [profileName, setProfileName] = useState("Shahzad Ali");
+  const [profileName, setProfileName] = useState(null);
   const [profileTitle, setProfileTitle] = useState("Blockchain dev");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
+  const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [additionalTexts, setAdditionalTexts] = useState([
     "Education",
@@ -79,7 +88,7 @@ const Prosidebar = () => {
         console.error("Error fetching Profile data:", error);
       }
     };
-  
+
     fetchData();
   }, []);
   const saveProfileDataToFirestore = async (url) => {
@@ -91,7 +100,7 @@ const Prosidebar = () => {
       profileName: profileName,
       profileTitle: profileTitle,
     });
-    console.log(url)
+    console.log(url);
     console.log("Profile data uploaded to Firestore!");
   };
 
@@ -109,7 +118,10 @@ const Prosidebar = () => {
     await uploadBytes(imageRef, selectedImage);
     // Update image URL in Firestore
     await updateImageUrlInFirestore(url);
-    console.log("Image uploaded to Firebase Storage and URL updated in Firestore:", url);
+    console.log(
+      "Image uploaded to Firebase Storage and URL updated in Firestore:",
+      url
+    );
   };
 
   const getFormattedProfileName = (name) => {
@@ -118,6 +130,17 @@ const Prosidebar = () => {
     const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
     return `${firstName} ${lastNameInitial}`;
   };
+
+  useEffect(() => {
+    onAuthStateChanged(getAuth(), (user) => {
+      console.log(user);
+      if (user) {
+        console.log("User display name:", user.displayName);
+        setProfileName(user.displayName);
+        setPhotourl(user.photoURL);
+      }
+    });
+  }, []);
 
   return (
     <div className="w-[23%]">
@@ -143,10 +166,10 @@ const Prosidebar = () => {
             setSelectedImage={setSelectedImage}
             onImageUpload={handleImageUpload}
             proData={proData}
+            photourl={photourl}
           />
 
           <div>
-            
             <h3 className="text-2xl font-semibold text-[#151D48]">
               {editMode ? (
                 <input
@@ -156,7 +179,7 @@ const Prosidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-               getFormattedProfileName(profileName)
+                profileName
               )}
             </h3>
             <p className="text-xs">

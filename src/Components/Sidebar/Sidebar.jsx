@@ -7,10 +7,11 @@ import { SlNotebook } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
-import { GiCloudUpload } from "react-icons/gi";
-import { collection, getDocs, doc, getDoc ,onSnapshot} from "firebase/firestore";
+// import { GiCloudUpload } from "react-icons/gi";
+import { doc,onSnapshot} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -29,14 +30,15 @@ export const firestore = getFirestore(app);
 
 const Sidebar = () => {
   const [editMode, setEditMode] = useState(false);
-  const [profileName, setProfileName] = useState("Shahzad");
+  const [profileName, setProfileName] = useState(null);
   const [profileTitle, setProfileTitle] = useState("Blockchain Developer");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
+  const [photourl ,setPhotourl] =useState(null);
   const [newText, setNewText] = useState("");
   const [profileData, setProfileData] = useState({
     imageUrl: "",
-    profileName: "Shahzad Ali",
+    profileName: "",
     profileTitle: "Blockchain Developer",
   });
   const [additionalTexts, setAdditionalTexts] = useState([
@@ -69,7 +71,7 @@ const Sidebar = () => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
               setProfileData(data);
-              console.log("Data in navbar:", data);
+              // console.log("Data in navbar:", data);
             } else {
               console.log("No such document!");
             }
@@ -87,13 +89,20 @@ const Sidebar = () => {
   }, []);
 
 
+  useEffect(() => {
+    onAuthStateChanged(getAuth(), (user) => {
+      console.log(user)
+      if (user) {
 
-  const getFormattedProfileName = (name) => {
-    const words = name.split(" ");
-    const firstName = words[0];
-    const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
-    return `${firstName} ${lastNameInitial}`;
-  };
+        console.log("User display name:", user.displayName);
+        setProfileName(user.displayName);
+        setPhotourl(user.photoURL)
+      }
+    });
+  }, []);
+
+
+
 
   return (
     <div className="w-[23%]">
@@ -114,7 +123,7 @@ const Sidebar = () => {
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
               src={
-                profileData.imageUrl
+                photourl
               }
               alt=""
               className="w-full h-full"
@@ -130,7 +139,7 @@ const Sidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileData.profileName
+                profileName
               )}
             </h3>
             <p className="text-xs">

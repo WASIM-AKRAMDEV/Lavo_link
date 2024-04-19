@@ -205,7 +205,7 @@ const SignUp = () => {
               onClick={signInwithGoogle}
               className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 mb-5 cursor-pointer"
             >
-              <img src="./assets/googleIcon.svg" alt="" />
+              <img src="./assets/images/googleIcon.svg" alt="" />
               <span className="capitalize pl-6 mt-2">continue with google</span>
             </div>
             <div className="flex justify-between max-md:block">

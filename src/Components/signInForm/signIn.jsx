@@ -7,10 +7,12 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { provider } from "../../FirebaseConfig";
+import { provider, database } from "../../FirebaseConfig";
+import { updateDoc, doc } from "firebase/firestore";
 
 const SignIn = () => {
   const navigate = useNavigate();
+
   const [errors, setErrors] = useState({ email: null, password: null });
 
   useEffect(() => {
@@ -31,6 +33,7 @@ const SignIn = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+
         console.log(user, "User signed in successfully");
         localStorage.setItem("loggedIn", true);
         navigate("/");
@@ -51,17 +54,29 @@ const SignIn = () => {
   const signInwithGoogle = () => {
     const auth = getAuth();
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        // return{
+        //   uid:user.uid,
+        //   displayName:user.displayName,
+        //   photoURL:user.photoURL,
+        // };
         // IdP data available using getAdditionalUserInfo(result)
         // ...
         console.log(token, user);
         localStorage.setItem("loggedIn", true);
         navigate("/");
+        // Specific ID in the profiles collection
+        // const profileId = "k8cqN13B5HM0QFNdxXGO";
+        // // Update profileName in Firestore at the specific ID
+        // await updateDoc(doc(database, "profiles", profileId), {
+        //   profileName: user.displayName,
+        // });
+        // console.log(updateDoc)
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {

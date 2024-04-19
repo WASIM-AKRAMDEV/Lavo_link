@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -58,6 +59,8 @@ const Navbar = () => {
     profileName: "Shahzad Ali",
     profileTitle: "Blockchain Developer",
   });
+  const [profileName, setProfileName] = useState(null);
+  const [photourl, setPhotourl] = useState(null);
   const location = useLocation();
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -88,7 +91,7 @@ const Navbar = () => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
               setProfileData(data);
-              console.log("Data in navbar:", data);
+              // console.log("Data in navbar:", data);
             } else {
               console.log("No such document!");
             }
@@ -116,6 +119,17 @@ const Navbar = () => {
         console.error("Error signing out:", error.message);
       });
   };
+
+  useEffect(() => {
+    onAuthStateChanged(getAuth(), (user) => {
+      console.log(user);
+      if (user) {
+        console.log("User display name:", user.displayName);
+        setProfileName(user.displayName);
+        setPhotourl(user.photoURL);
+      }
+    });
+  }, []);
   return (
     <Disclosure
       as="nav"
@@ -200,8 +214,7 @@ const Navbar = () => {
                         <img
                           className="h-full w-full rounded-full "
                           src={
-                            profileData.imageUrl ||
-                            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                           photourl
                           }
                           alt="Profile"
                         />
@@ -209,7 +222,7 @@ const Navbar = () => {
                       <div>
                         <div className="flex justify-between items-center">
                           <h5 className="text-sm text-[#151D48] font-medium">
-                            {profileData.profileName || "Shahzad Ali"}
+                            {profileName }
                           </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
@@ -238,8 +251,7 @@ const Navbar = () => {
                             <img
                               className="h-full w-full rounded-lg "
                               src={
-                                profileData.imageUrl ||
-                                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                               photourl
                               }
                               alt="Profile"
                             />
@@ -247,7 +259,7 @@ const Navbar = () => {
                         )}
                       </Menu.Item>
                       <h5 className="text-[#737791] text-xs my-2">
-                      {profileData.profileName || "Shahzad Ali"}
+                      {profileName}
                       </h5>
                       <div className="flex gap-1 py-2">
                         <button className="bg-[#5D5FEF] text-white font-normal text-sm px-[15px] py-[2px] rounded">
