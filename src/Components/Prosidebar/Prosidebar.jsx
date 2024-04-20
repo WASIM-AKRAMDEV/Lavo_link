@@ -40,7 +40,7 @@ const Prosidebar = () => {
   const [profileTitle, setProfileTitle] = useState("Blockchain dev");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  // const [photourl, setPhotourl] = useState(null);
+  const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [additionalTexts, setAdditionalTexts] = useState([
     "Education",
@@ -131,16 +131,16 @@ const Prosidebar = () => {
     return `${firstName} ${lastNameInitial}`;
   };
 
-  // useEffect(() => {
-  //   onAuthStateChanged(getAuth(), (user) => {
-  //     console.log(user);
-  //     if (user) {
-  //       console.log("User display name:", user.displayName);
-  //       setProfileName(user.displayName);
-   
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    onAuthStateChanged(getAuth(), (user) => {
+      console.log(user);
+      if (user) {
+        console.log("User display name:", user.displayName);
+        setProfileName(user.displayName);
+        setPhotourl(user.photoURL)
+      }
+    });
+  }, []);
 
   return (
     <div className="w-[23%]">
@@ -166,7 +166,7 @@ const Prosidebar = () => {
             setSelectedImage={setSelectedImage}
             onImageUpload={handleImageUpload}
             proData={proData}
-          
+            photourl={photourl}
           />
 
           <div>
