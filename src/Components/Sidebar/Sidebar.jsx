@@ -89,17 +89,17 @@ const Sidebar = () => {
   }, []);
 
 
-  // useEffect(() => {
-  //   onAuthStateChanged(getAuth(), (user) => {
-  //     console.log(user)
-  //     if (user) {
+  useEffect(() => {
+    onAuthStateChanged(getAuth(), (user) => {
+      console.log(user)
+      if (user) {
 
-  //       console.log("User display name:", user.displayName);
-  //       setProfileName(user.displayName);
-  //       // setPhotourl(user.photoURL)
-  //     }
-  //   });
-  // }, []);
+        console.log("User display name:", user.displayName);
+        setProfileName(user.displayName);
+        // setPhotourl(user.photoURL)
+      }
+    });
+  }, []);
 
 
 
