@@ -31,7 +31,7 @@ export const firestore = getFirestore(app);
 const Sidebar = () => {
   const [editMode, setEditMode] = useState(false);
   const [profileName, setProfileName] = useState(null);
-  const [profileTitle, setProfileTitle] = useState("Blockchain Developer");
+  const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
   const [photourl ,setPhotourl] =useState(null);
@@ -39,7 +39,7 @@ const Sidebar = () => {
   const [profileData, setProfileData] = useState({
     imageUrl: "",
     profileName: "",
-    profileTitle: "Blockchain Developer",
+    profileTitle: "",
   });
   const [additionalTexts, setAdditionalTexts] = useState([
     "Lavolink Academy",

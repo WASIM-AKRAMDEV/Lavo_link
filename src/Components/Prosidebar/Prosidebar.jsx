@@ -37,7 +37,7 @@ const storage = getStorage(app);
 const Prosidebar = () => {
   const [editMode, setEditMode] = useState(false);
   const [profileName, setProfileName] = useState(null);
-  const [profileTitle, setProfileTitle] = useState("Blockchain dev");
+  const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
   const [photourl, setPhotourl] = useState(null);

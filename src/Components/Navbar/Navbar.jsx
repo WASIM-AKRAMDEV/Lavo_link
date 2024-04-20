@@ -228,7 +228,7 @@ const Navbar = () => {
                           <IoIosArrowDown className="text-sm" />
                         </div>
                         <p className=" text-xs text-[#737791] font-normal">
-                          {profileData.profileTitle || "Blockchain developer"}
+                          {profileData.profileTitle}
                         </p>
                       </div>
                     </Menu.Button>
