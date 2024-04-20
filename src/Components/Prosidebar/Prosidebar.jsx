@@ -4,7 +4,7 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
-import { GiCloudUpload } from "react-icons/gi";
+// import { GiCloudUpload } from "react-icons/gi";
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
@@ -131,16 +131,16 @@ const Prosidebar = () => {
     return `${firstName} ${lastNameInitial}`;
   };
 
-  useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user);
-      if (user) {
-        console.log("User display name:", user.displayName);
-        setProfileName(user.displayName);
+  // useEffect(() => {
+  //   onAuthStateChanged(getAuth(), (user) => {
+  //     console.log(user);
+  //     if (user) {
+  //       console.log("User display name:", user.displayName);
+  //       setProfileName(user.displayName);
    
-      }
-    });
-  }, []);
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div className="w-[23%]">
@@ -179,7 +179,8 @@ const Prosidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileName
+                
+                getFormattedProfileName(profileName)
               )}
             </h3>
             <p className="text-xs">

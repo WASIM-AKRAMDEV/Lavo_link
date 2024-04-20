@@ -120,16 +120,16 @@ const Navbar = () => {
       });
   };
 
-  useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user);
-      if (user) {
-        console.log("User display name:", user.displayName);
-        setProfileName(user.displayName);
-        // setPhotourl(user.photoURL);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   onAuthStateChanged(getAuth(), (user) => {
+  //     console.log(user);
+  //     if (user) {
+  //       console.log("User display name:", user.displayName);
+  //       setProfileName(user.displayName);
+  //       // setPhotourl(user.photoURL);
+  //     }
+  //   });
+  // }, []);
   return (
     <Disclosure
       as="nav"
@@ -222,7 +222,7 @@ const Navbar = () => {
                       <div>
                         <div className="flex justify-between items-center">
                           <h5 className="text-sm text-[#151D48] font-medium">
-                            {profileName }
+                            {profileData.profileName}
                           </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
@@ -259,7 +259,7 @@ const Navbar = () => {
                         )}
                       </Menu.Item>
                       <h5 className="text-[#737791] text-xs my-2">
-                      {profileName}
+                      {profileData.profileName}
                       </h5>
                       <div className="flex gap-1 py-2">
                         <button className="bg-[#5D5FEF] text-white font-normal text-sm px-[15px] py-[2px] rounded">
