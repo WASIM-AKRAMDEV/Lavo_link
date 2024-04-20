@@ -131,16 +131,16 @@ const Prosidebar = () => {
     return `${firstName} ${lastNameInitial}`;
   };
 
-  useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user);
-      if (user) {
-        console.log("User display name:", user.displayName);
-        setProfileName(user.displayName);
+  // useEffect(() => {
+  //   onAuthStateChanged(getAuth(), (user) => {
+  //     console.log(user);
+  //     if (user) {
+  //       console.log("User display name:", user.displayName);
+  //       setProfileName(user.displayName);
    
-      }
-    });
-  }, []);
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div className="w-[23%]">
