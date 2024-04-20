@@ -180,7 +180,8 @@ const Prosidebar = () => {
                 />
               ) : (
                 
-                getFormattedProfileName(profileName)
+                // getFormattedProfileName(profileName)
+                profileName
               )}
             </h3>
             <p className="text-xs">
