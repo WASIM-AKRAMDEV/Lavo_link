@@ -88,16 +88,22 @@ const handleSignInWithFacebook = () => {
   const provider = new FacebookAuthProvider();
   signInWithPopup(auth, provider)
     .then((result) => {
+      // Successful sign-in
       const user = result.user;
-      console.log(user);
+      console.log("User signed in with Facebook:", user);
       localStorage.setItem("loggedIn", true);
       navigate("/");
     })
     .catch((error) => {
+      // Handle errors
       console.error("Error signing in with Facebook:", error);
+      // You can provide specific error messages to the user based on error.code
+      // For example:
+      // if (error.code === "auth/account-exists-with-different-credential") {
+      //   alert("An account already exists with the same email address but different sign-in credentials. Try signing in with a different method.");
+      // }
     });
-};
-
+}
 
 
 
