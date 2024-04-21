@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  FacebookAuthProvider
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
@@ -81,6 +82,26 @@ const SignIn = () => {
         }
       });
   };
+// signin with facebook
+const handleSignInWithFacebook = () => {
+  const auth = getAuth();
+  const provider = new FacebookAuthProvider();
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      console.log(user);
+      localStorage.setItem("loggedIn", true);
+      navigate("/");
+    })
+    .catch((error) => {
+      console.error("Error signing in with Facebook:", error);
+    });
+};
+
+
+
+
+
 
   const [showPassword, setShowPassword] = useState(false);
   // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -226,7 +247,7 @@ const SignIn = () => {
               <img src="./assets/images/appleIcon.svg" alt="" />
               <span className="capitalize pl-6 mt-2">apple</span>
             </div>
-            <div className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 w-full mb-5 ml-5 cursor-pointer max-sm:ml-0">
+            <div onClick={handleSignInWithFacebook} className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 w-full mb-5 ml-5 cursor-pointer max-sm:ml-0">
               <img src="./assets/images/facebookIcon.svg" alt="" />
               <span className="capitalize pl-6 mt-2">facebook</span>
             </div>
