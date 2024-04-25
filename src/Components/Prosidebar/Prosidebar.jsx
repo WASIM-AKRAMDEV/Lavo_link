@@ -17,7 +17,7 @@ import {
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ProImageUploader from "../ProImageUploader/ProImageUploader";
-import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { getAuth, onAuthStateChanged, } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -131,34 +131,9 @@ const Prosidebar = () => {
     return `${firstName} ${lastNameInitial}`;
   };
 
-  useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user);
-      if (user) {
-        console.log("User display name:", user.displayName);
-        setProfileName(user.displayName);
-        setPhotourl(user.photoURL);
-      }
-    });
-  }, []);
 
-  const auth = getAuth();
-  updateProfile(auth.currentUser, {
-    profileName: profileName,
-    imageUrl: photourl,
-  })
-    .then(async() => {
-      // Profile updated!
-      await updateDoc(doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
-        profileName: profileName,
-        imageUrl: photourl,
-      });
-      
-    })
-    .catch((error) => {
-      // An error occurred
-      // ...
-    });
+
+ 
 
   return (
     <div className="w-[23%]">
