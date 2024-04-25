@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import { collection, getDocs, doc, getDoc ,onSnapshot} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IoSearch } from "react-icons/io5";
@@ -45,7 +51,6 @@ const navigation = [
   { name: "Post Jobs", current: false, path: "/postjobs" },
   { name: "Messages", current: false, path: "/messages/firstPage" },
   { name: "Your Orders", current: false, path: "/Yourorder" },
-
 ];
 
 function classNames(...classes) {
@@ -54,11 +59,7 @@ function classNames(...classes) {
 
 const Navbar = () => {
   const [walletAddress, setWalletAddress] = useState();
-  const [profileData, setProfileData] = useState({
-    imageUrl: "",
-    profileName: "Shahzad Ali",
-    profileTitle: "Blockchain Developer",
-  });
+  const [profileData, setProfileData] = useState({});
   const [profileName, setProfileName] = useState(null);
   const [photourl, setPhotourl] = useState(null);
   const location = useLocation();
@@ -80,6 +81,20 @@ const Navbar = () => {
   }, [localStorage.getItem("wallAddr")]);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   onAuthStateChanged(getAuth(), (user) => {
+  //     console.log(user);
+  //     if (user) {
+  //       console.log("current users data", user);
+
+  //       setProfileName(user.displayName);
+  //       setPhotourl(user.photoURL);
+  //     }
+  //   });
+  // }, []);
+
+  ///////////////////////////////////////
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -91,12 +106,12 @@ const Navbar = () => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
               setProfileData(data);
-              // console.log("Data in navbar:", data);
+              console.log("Data in navbar:", data);
             } else {
               console.log("No such document!");
             }
           });
-  
+
           // Return the unsubscribe function to clean up the listener when the component unmounts
           return () => unsubscribe();
         }
@@ -104,9 +119,11 @@ const Navbar = () => {
         console.error("Error fetching profile data:", error);
       }
     };
-  
+
     fetchProfileData();
   }, []);
+
+  ////////////////////////////////
 
   const handleLogout = () => {
     signOut(database)
@@ -120,16 +137,6 @@ const Navbar = () => {
       });
   };
 
-  useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user);
-      if (user) {
-        console.log("User display name:", user.displayName);
-        setProfileName(user.displayName);
-        setPhotourl(user.photoURL);
-      }
-    });
-  }, []);
   return (
     <Disclosure
       as="nav"
@@ -214,8 +221,7 @@ const Navbar = () => {
                         <img
                           className="h-full w-full rounded-full "
                           src={
-                            //  profileData.imageUrl
-                            photourl
+                             profileData.imageUrl
                           }
                           alt="Profile"
                         />
@@ -223,12 +229,12 @@ const Navbar = () => {
                       <div>
                         <div className="flex justify-between items-center">
                           <h5 className="text-sm text-[#151D48] font-medium">
-                            {profileName}
+                            {profileData.profileName}
                           </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
                         <p className=" text-xs text-[#737791] font-normal">
-                          {profileData.profileTitle}
+                          {/* {profileData.profileTitle} */}
                         </p>
                       </div>
                     </Menu.Button>
@@ -252,8 +258,7 @@ const Navbar = () => {
                             <img
                               className="h-full w-full rounded-lg "
                               src={
-                            //  profileData.imageUrl
-                            photourl
+                                 profileData.imageUrl
                               }
                               alt="Profile"
                             />
@@ -261,7 +266,7 @@ const Navbar = () => {
                         )}
                       </Menu.Item>
                       <h5 className="text-[#737791] text-xs my-2">
-                      {profileName}
+                        {profileData.profileName}
                       </h5>
                       <div className="flex gap-1 py-2">
                         <button className="bg-[#5D5FEF] text-white font-normal text-sm px-[15px] py-[2px] rounded">

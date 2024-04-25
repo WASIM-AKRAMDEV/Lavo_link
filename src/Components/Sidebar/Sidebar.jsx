@@ -89,17 +89,17 @@ const Sidebar = () => {
   }, []);
 
 
-  useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user)
-      if (user) {
+  // useEffect(() => {
+  //   onAuthStateChanged(getAuth(), (user) => {
+  //     console.log(user)
+  //     if (user) {
 
-        console.log("User display name:", user.displayName);
-        setProfileName(user.displayName);
-        setPhotourl(user.photoURL)
-      }
-    });
-  }, []);
+  //       console.log("User display name:", user.displayName);
+  //       setProfileName(user.displayName);
+  //       setPhotourl(user.photoURL)
+  //     }
+  //   });
+  // }, []);
 
 
 
@@ -123,8 +123,8 @@ const Sidebar = () => {
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
               src={
-                // profileData.imageUrl
-                photourl
+                profileData.imageUrl
+                // photourl
               }
               alt=""
               className="w-full h-full"
@@ -140,7 +140,7 @@ const Sidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileName
+                profileData.profileName
               )}
             </h3>
             <p className="text-xs">

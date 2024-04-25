@@ -26,8 +26,8 @@ if (!firebase.apps.length) {
 
 const storage = firebase.storage();
 
-const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,proData ,photourl }) => {
-
+const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,  proData }) => {
+ 
   const [uploading, setUploading] = useState(false);
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
@@ -106,8 +106,7 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,proDa
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
-                  :photourl
-                  // : proData.imageURl
+                  : proData.imageURl
 
 
               }
