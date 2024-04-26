@@ -65,6 +65,11 @@ const SignIn = () => {
         
         // IdP data available using getAdditionalUserInfo(result)
         // ...
+        // await updateDoc(doc(database, "profile", "IF7KyLY3v7plAay5NXWV"), {
+        //   profileName: user.displayName,
+        //   imageUrl: user.photoURL,
+        // });
+
         console.log(token, user);
         localStorage.setItem("loggedIn", true);
         navigate("/");

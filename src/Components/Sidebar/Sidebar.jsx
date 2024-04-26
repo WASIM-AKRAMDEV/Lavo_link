@@ -88,35 +88,41 @@ const Sidebar = () => {
     fetchProfileData();
   }, []);
 
- 
-  // useEffect(() => {
-  //   onAuthStateChanged( getAuth(), (user) => {
-  //     console.log(user);
-  //     if (user) {
-  //       console.log("User display name:", user.displayName);
-  //       setProfileName(user.displayName);
-  //       setPhotourl(user.photoURL);
-  //     }
-  //   });
-  // }, []);
-  
-  // const auth = getAuth();
-  // updateProfile(auth.currentUser, {
-  //   profileName: profileName,
-  //   imageUrl: photourl,
-  // })
-  //   .then(async () => {
-  //     // Profile updated!
-  //     await updateDoc(doc(firestore, "profile", "IF7KyLY3v7plAay5NXWV"), {
-  //       profileName: profileName,
-  //       imageUrl: photourl,
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     // An error occurred
-  //     // ...
-  //   });
+  const auth = getAuth();
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log(user);
+      if (user) {
+        console.log("User display name:", user.displayName);
+        setProfileName(user.displayName);
+        setPhotourl(user.photoURL);
+      }
+    });
+  }, [auth]);
+
+  const hasDetails = localStorage.getItem("hasDetails");
+  if (!hasDetails) {
+    updateProfile(auth.currentUser, {
+      profileName: profileName,
+      imageUrl: photourl,
+    })
+      .then(async () => {
+        // Profile updated!
+        console.log("test");
+        await updateDoc(doc(firestore, "profile", "IF7KyLY3v7plAay5NXWV"), {
+          profileName: profileName,
+          imageUrl: photourl,
+        }).then(() => {
+          localStorage.setItem("hasDetails", true);
+          console.log("test1");
+        });
+      })
+      .catch((error) => {
+        // An error occurred
+        // ...
+      });
+  }
 
   return (
     <div className="w-[23%]">

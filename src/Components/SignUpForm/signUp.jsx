@@ -5,14 +5,13 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   FacebookAuthProvider,
-  updateProfile 
+  updateProfile,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { provider ,database } from "../../FirebaseConfig"; // Make sure you have FirebaseConfig properly set up
+import { provider, database } from "../../FirebaseConfig"; // Make sure you have FirebaseConfig properly set up
 import { Link } from "react-router-dom";
-import { doc ,updateDoc } from "firebase/firestore";
-
+import { doc, updateDoc } from "firebase/firestore";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -60,37 +59,16 @@ const SignUp = () => {
   const signInwithGoogle = () => {
     const auth = getAuth();
     signInWithPopup(auth, provider)
-      .then((result) => {
-       
+      .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-        console.log(token, user);
+        console.log(user);
         localStorage.setItem("loggedIn", true);
+        localStorage.setItem("hasDetails", false);
         navigate("/");
-      
-       
-        
-        const auth = getAuth();
-        updateProfile(auth.currentUser, {
-          displayName: user.diplayName ,
-          photoURL: user.photoURL ,
-        })
-          .then(async () => {
-            // Profile updated!
-            await updateDoc(doc(database, "profile", "IF7KyLY3v7plAay5NXWV"), {
-              profileName: user.displayName,
-              imageUrl: user.photoURL,
-            });
-          })
-          .catch((error) => {
-            // An error occurred
-            // ...
-          });
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -104,28 +82,28 @@ const SignUp = () => {
         }
       });
   };
-// signin with facebook
-const handleSignInWithFacebook = () => {
-  const auth = getAuth();
-  const provider = new FacebookAuthProvider();
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      // Successful sign-in
-      const user = result.user;
-      console.log("User signed in with Facebook:", user);
-      localStorage.setItem("loggedIn", true);
-      navigate("/");
-    })
-    .catch((error) => {
-      // Handle errors
-      console.error("Error signing in with Facebook:", error);
-      // You can provide specific error messages to the user based on error.code
-      // For example:
-      // if (error.code === "auth/account-exists-with-different-credential") {
-      //   alert("An account already exists with the same email address but different sign-in credentials. Try signing in with a different method.");
-      // }
-    });
-}
+  // signin with facebook
+  const handleSignInWithFacebook = () => {
+    const auth = getAuth();
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // Successful sign-in
+        const user = result.user;
+        console.log("User signed in with Facebook:", user);
+        localStorage.setItem("loggedIn", true);
+        navigate("/");
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error signing in with Facebook:", error);
+        // You can provide specific error messages to the user based on error.code
+        // For example:
+        // if (error.code === "auth/account-exists-with-different-credential") {
+        //   alert("An account already exists with the same email address but different sign-in credentials. Try signing in with a different method.");
+        // }
+      });
+  };
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
@@ -167,9 +145,9 @@ const handleSignInWithFacebook = () => {
             onSubmit={handleSubmit}
           >
             <div className="w-full flex items-center justify-center ">
-            <a href="#" className="font-semibold text-[#151D48] w-32">
-              <img src="/assets/images/Lavolink-logo.png" alt="" />
-            </a>
+              <a href="#" className="font-semibold text-[#151D48] w-32">
+                <img src="/assets/images/Lavolink-logo.png" alt="" />
+              </a>
             </div>
             <h4 className="capitalize text-[#221d59] text-6xl leading-[98px] font-semibold max-lg:text-[60px] max-lg:leading-[90px] max-md:text-[50px] max-md:leading-[80px] max-sm:text-[40px] max-sm:leading-[70px]">
               Welcome Back
@@ -258,7 +236,10 @@ const handleSignInWithFacebook = () => {
                 <img src="./assets/images/appleIcon.svg" alt="" />
                 <span className="capitalize pl-6 mt-2">apple</span>
               </div>
-              <div onClick={handleSignInWithFacebook} className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 w-full mb-5 ml-5 cursor-pointer max-md:ml-0">
+              <div
+                onClick={handleSignInWithFacebook}
+                className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 w-full mb-5 ml-5 cursor-pointer max-md:ml-0"
+              >
                 <img src="./assets/images/facebookIcon.svg" alt="" />
                 <span className="capitalize pl-6 mt-2">facebook</span>
               </div>
