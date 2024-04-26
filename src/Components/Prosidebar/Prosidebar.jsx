@@ -35,7 +35,7 @@ const storage = getStorage(app);
 
 const Prosidebar = () => {
   const [editMode, setEditMode] = useState(false);
-  const [profileName, setProfileName] = useState(null);
+  const [profileName, setProfileName] = useState("");
   const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
@@ -66,6 +66,7 @@ const Prosidebar = () => {
     setAdditionalTexts(updatedTexts);
  
   };
+  
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -74,6 +75,7 @@ const Prosidebar = () => {
     profileName: "",
     profileTitle: "",
   });
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,6 +85,7 @@ const Prosidebar = () => {
         if (docSnap.exists()) {
           const dataPro = { id: docSnap.id, ...docSnap.data() };
           setProData(dataPro);
+          setProfileName(dataPro.profileName); // Set profileName here
           console.log("Profile Data:", dataPro);
         } else {
           console.log("No such document!");
@@ -91,7 +94,7 @@ const Prosidebar = () => {
         console.error("Error fetching Profile data:", error);
       }
     };
-
+  
     fetchData();
   }, []);
   console.log( "ProData in prosidebar:", proData)
@@ -165,16 +168,16 @@ const Prosidebar = () => {
           />
 
           <div>
-            <h3 className="text-2xl font-semibold text-[#151D48]">
+            <h3 className="text-xl font-semibold text-[#151D48]">
               {editMode ? (
                 <input
                   type="text"
-                  value={proData.profileName}
+                  value={profileName}
                   onChange={(e) => setProfileName(e.target.value)}
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                proData.profileName
+                profileName
               )}
             </h3>
             <p className="text-xs">
