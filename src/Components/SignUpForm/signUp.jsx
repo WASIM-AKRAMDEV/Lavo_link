@@ -4,12 +4,15 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  FacebookAuthProvider
+  FacebookAuthProvider,
+  updateProfile 
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { provider } from "../../FirebaseConfig"; // Make sure you have FirebaseConfig properly set up
+import { provider ,database } from "../../FirebaseConfig"; // Make sure you have FirebaseConfig properly set up
 import { Link } from "react-router-dom";
+import { doc ,updateDoc } from "firebase/firestore";
+
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -69,6 +72,25 @@ const SignUp = () => {
         console.log(token, user);
         localStorage.setItem("loggedIn", true);
         navigate("/");
+      
+       
+        
+        const auth = getAuth();
+        updateProfile(auth.currentUser, {
+          displayName: user.diplayName ,
+          photoURL: user.photoURL ,
+        })
+          .then(async () => {
+            // Profile updated!
+            await updateDoc(doc(database, "profile", "IF7KyLY3v7plAay5NXWV"), {
+              profileName: user.displayName,
+              imageUrl: user.photoURL,
+            });
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+          });
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
