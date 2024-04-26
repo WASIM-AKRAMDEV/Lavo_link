@@ -8,10 +8,10 @@ import { Link } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 // import { GiCloudUpload } from "react-icons/gi";
-import { doc,onSnapshot ,updateDoc} from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, onAuthStateChanged ,updateProfile} from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,7 +34,7 @@ const Sidebar = () => {
   const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  const [photourl ,setPhotourl] =useState(null);
+  const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [profileData, setProfileData] = useState({
     imageUrl: "",
@@ -64,9 +64,9 @@ const Sidebar = () => {
     const fetchProfileData = async () => {
       try {
         // const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
-        const userId = "k8cqN13B5HM0QFNdxXGO";
+        const userId = "IF7KyLY3v7plAay5NXWV";
         if (userId) {
-          const profileDocRef = doc(firestore, "profiles", userId);
+          const profileDocRef = doc(firestore, "profile", userId);
           const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
@@ -76,7 +76,7 @@ const Sidebar = () => {
               console.log("No such document!");
             }
           });
-  
+
           // Return the unsubscribe function to clean up the listener when the component unmounts
           return () => unsubscribe();
         }
@@ -84,35 +84,32 @@ const Sidebar = () => {
         console.error("Error fetching profile data:", error);
       }
     };
-  
+
     fetchProfileData();
   }, []);
 
-
+  const auth = getAuth();
   useEffect(() => {
-    onAuthStateChanged(getAuth(), (user) => {
-      console.log(user)
+    onAuthStateChanged(auth, (user) => {
+      console.log(user);
       if (user) {
-
         console.log("User display name:", user.displayName);
         setProfileName(user.displayName);
-        setPhotourl(user.photoURL)
+        setPhotourl(user.photoURL);
       }
     });
-  }, []);
+  }, [auth]);
 
-  const auth = getAuth();
   updateProfile(auth.currentUser, {
     profileName: profileName,
     imageUrl: photourl,
   })
-    .then(async() => {
+    .then(async () => {
       // Profile updated!
-      await updateDoc(doc(firestore, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
+      await updateDoc(doc(firestore, "profile", "IF7KyLY3v7plAay5NXWV"), {
         profileName: profileName,
         imageUrl: photourl,
       });
-      
     })
     .catch((error) => {
       // An error occurred

@@ -4,8 +4,6 @@ import "firebase/compat/firestore";
 import "firebase/compat/storage";
 import { GiCloudUpload } from "react-icons/gi";
 import { FaCheck } from "react-icons/fa6";
-import { RxCross2 } from "react-icons/rx";
-
 
 
 // Initialize Firebase (you should replace this with your Firebase config)
@@ -26,13 +24,16 @@ if (!firebase.apps.length) {
 
 const storage = firebase.storage();
 
-const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,  proData }) => {
- 
+const ProImageUploader = ({
+  onImageUpload,
+  selectedImage,
+  setSelectedImage,
+  proData,
+}) => {
   const [uploading, setUploading] = useState(false);
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
-      
     }
     e.target.value = null;
   };
@@ -48,7 +49,7 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,  pro
         "state_changed",
         (snapshot) => {
           // progress function
-          setUploading(false)
+          setUploading(false);
         },
         (error) => {
           console.error(error);
@@ -74,10 +75,11 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,  pro
       );
     }
   };
+  console.log("Profile Data in ProimageUploader:", proData);
 
   return (
     <div className="flex flex-col relative">
-        {!uploading && selectedImage && (
+      {!uploading && selectedImage && (
         <button
           className="absolute top-[-25px] right-[30px] text-black text-[10px]"
           onClick={handleUpload}
@@ -106,13 +108,13 @@ const ProImageUploader = ({ onImageUpload, selectedImage, setSelectedImage,  pro
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
-                  : proData.imageURl
-
-
+                  : proData?.imageUrl
+                  
               }
               alt="Selected"
               className="w-full h-full object-cover"
-            />
+              />
+              {console.log("Hello Wasim Baie" ,proData.imageURl)}
             {selectedImage && (
               <GiCloudUpload className="text-[9px] text-[#151D48] text-center" />
             )}

@@ -10,14 +10,13 @@ import {
   getFirestore,
   updateDoc,
   doc,
-  collection,
-  getDocs,
+  
   getDoc,
 } from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ProImageUploader from "../ProImageUploader/ProImageUploader";
-import { getAuth, onAuthStateChanged, } from "firebase/auth";
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -40,7 +39,6 @@ const Prosidebar = () => {
   const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [additionalTexts, setAdditionalTexts] = useState([
     "Education",
@@ -66,16 +64,21 @@ const Prosidebar = () => {
     const updatedTexts = [...additionalTexts];
     updatedTexts.splice(index, 1);
     setAdditionalTexts(updatedTexts);
+ 
   };
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const [proData, setProData] = useState([]);
+  const [proData, setProData] = useState({
+    imageUrl: "",
+    profileName: "",
+    profileTitle: "",
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
         const db = getFirestore();
-        const ProfileDocRef = doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO");
+        const ProfileDocRef = doc(db, "profile", "IF7KyLY3v7plAay5NXWV");
         const docSnap = await getDoc(ProfileDocRef);
         if (docSnap.exists()) {
           const dataPro = { id: docSnap.id, ...docSnap.data() };
@@ -91,22 +94,26 @@ const Prosidebar = () => {
 
     fetchData();
   }, []);
+  console.log( "ProData in prosidebar:", proData)
   const saveProfileDataToFirestore = async (url) => {
     // Upload image to Firebase Storage
-    const imageRef = ref(storage, `profile_images/${selectedImage.name}`);
+    const imageRef = ref(storage, `profile_images/${selectedImage}`);
     await uploadBytes(imageRef, selectedImage);
     // Save profile data to Firestore
-    await updateDoc(doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
+    await updateDoc(doc(db, "profile", "IF7KyLY3v7plAay5NXWV"), {
       profileName: profileName,
       profileTitle: profileTitle,
     });
+    console.log("Profile name", profileName);
     console.log(url);
     console.log("Profile data uploaded to Firestore!");
   };
 
+
+  
   const updateImageUrlInFirestore = async (imageUrl) => {
     // Update image URL in Firestore
-    await updateDoc(doc(db, "profiles", "k8cqN13B5HM0QFNdxXGO"), {
+    await updateDoc(doc(db, "profile", "IF7KyLY3v7plAay5NXWV"), {
       imageUrl: imageUrl,
     });
     console.log("Image URL updated in Firestore!");
@@ -114,7 +121,7 @@ const Prosidebar = () => {
 
   const handleImageUpload = async (url) => {
     // Upload image to Firebase Storage
-    const imageRef = ref(storage, `profile_images/${selectedImage.name}`);
+    const imageRef = ref(storage, `profile_images/${selectedImage}`);
     await uploadBytes(imageRef, selectedImage);
     // Update image URL in Firestore
     await updateImageUrlInFirestore(url);
@@ -124,17 +131,13 @@ const Prosidebar = () => {
     );
   };
 
-  const getFormattedProfileName = (name) => {
-    const words = name.split(" ");
-    const firstName = words[0];
-    const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
-    return `${firstName} ${lastNameInitial}`;
-  };
-
-
-
+  // const getFormattedProfileName = (name) => {
+  //   const words = name.split(" ");
+  //   const firstName = words[0];
+  //   const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
+  //   return `${firstName} ${lastNameInitial}`;
+  // };
  
-
   return (
     <div className="w-[23%]">
       <div className="bg-[#f9fafb] p-10 rounded-[19px] h-[246px] flex flex-col justify-between relative">
@@ -159,7 +162,6 @@ const Prosidebar = () => {
             setSelectedImage={setSelectedImage}
             onImageUpload={handleImageUpload}
             proData={proData}
-           
           />
 
           <div>
@@ -167,13 +169,12 @@ const Prosidebar = () => {
               {editMode ? (
                 <input
                   type="text"
-                  value={profileName}
+                  value={proData.profileName}
                   onChange={(e) => setProfileName(e.target.value)}
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                // getFormattedProfileName(profileName)
-                profileName
+                proData.profileName
               )}
             </h3>
             <p className="text-xs">

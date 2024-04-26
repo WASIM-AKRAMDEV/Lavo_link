@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import {
-  collection,
-  getDocs,
   doc,
-  getDoc,
   onSnapshot,
 } from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
@@ -22,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -60,8 +57,7 @@ function classNames(...classes) {
 const Navbar = () => {
   const [walletAddress, setWalletAddress] = useState();
   const [profileData, setProfileData] = useState({});
-  const [profileName, setProfileName] = useState(null);
-  const [photourl, setPhotourl] = useState(null);
+
   const location = useLocation();
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -99,14 +95,14 @@ const Navbar = () => {
     const fetchProfileData = async () => {
       try {
         // const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
-        const userId = "k8cqN13B5HM0QFNdxXGO";
+        const userId = "IF7KyLY3v7plAay5NXWV";
         if (userId) {
-          const profileDocRef = doc(firestore, "profiles", userId);
+          const profileDocRef = doc(firestore, "profile", userId);
           const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
               setProfileData(data);
-              console.log("Data in navbar:", data);
+             
             } else {
               console.log("No such document!");
             }
