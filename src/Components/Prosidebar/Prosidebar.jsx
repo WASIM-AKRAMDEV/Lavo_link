@@ -10,12 +10,12 @@ import {
   getFirestore,
   updateDoc,
   doc,
-  
   getDoc,
 } from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ProImageUploader from "../ProImageUploader/ProImageUploader";
+import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 
 
 // Firebase configuration
@@ -39,6 +39,7 @@ const Prosidebar = () => {
   const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
+  // const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [additionalTexts, setAdditionalTexts] = useState([
     "Education",
@@ -134,12 +135,42 @@ const Prosidebar = () => {
     );
   };
 
-  // const getFormattedProfileName = (name) => {
-  //   const words = name.split(" ");
-  //   const firstName = words[0];
-  //   const lastNameInitial = words.length > 1 ? words[1].charAt(0) : "";
-  //   return `${firstName} ${lastNameInitial}`;
-  // };
+
+  // const auth = getAuth();
+
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     console.log("User:", user);
+  //     if (user) {
+  //       setProfileName(user.displayName);
+  //       setPhotourl(user.photoURL);
+  //     }
+  //   });
+  // }, [auth]);
+  // updateProfile(auth.currentUser, {
+  //   displayName: profileName,
+  //   photoURL: photourl
+  // }).then(() => {
+  //   console.log("Profile updated successfully!");
+  //   try {
+  //     // Update profile document in Firestore
+  //     console.log("Updating profile document...");
+  //     console.log("Profile name:", profileName);
+  //     console.log("Photo URL:", photourl);
+  //     updateDoc(doc(db, "profile", "IF7KyLY3v7plAay5NXWV"), {
+  //       profileName: profileName,
+  //       imageUrl: photourl
+  //     }).then(() => {
+  //       console.log("Profile document updated successfully!");
+  //     }).catch((error) => {
+  //       console.error("Error updating profile document:", error);
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //   }
+  // }).catch((error) => {
+  //   console.error("Error updating profile:", error);
+  // });
  
   return (
     <div className="w-[23%]">
