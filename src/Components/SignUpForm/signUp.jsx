@@ -67,7 +67,6 @@ const SignUp = () => {
         const user = result.user;
         console.log(user);
         localStorage.setItem("loggedIn", true);
-        localStorage.setItem("hasDetails", false);
         navigate("/");
       })
       .catch((error) => {

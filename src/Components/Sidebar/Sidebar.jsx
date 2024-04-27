@@ -12,6 +12,7 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { database } from "../../FirebaseConfig";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -92,34 +93,39 @@ const Sidebar = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log(user);
+      console.log("User:", user);
       if (user) {
-        console.log("User display name:", user.displayName);
         setProfileName(user.displayName);
         setPhotourl(user.photoURL);
-        localStorage.setItem("hasDetails", true);
       }
     });
   }, [auth]);
-
-    const hasDetails = localStorage.getItem("hasDetails");
-    if (!hasDetails) {
-      console.log("wasim baie")
-      updateProfile((auth.currentUser, "profile", "IF7KyLY3v7plAay5NXWV"),{
+  updateProfile(auth.currentUser, {
+    displayName: profileName,
+    photoURL: photourl
+  }).then(() => {
+    console.log("Profile updated successfully!");
+    try {
+      // Update profile document in Firestore
+      console.log("Updating profile document...");
+      console.log("Profile name:", profileName);
+      console.log("Photo URL:", photourl);
+      updateDoc(doc(firestore, "profile", "IF7KyLY3v7plAay5NXWV"), {
         profileName: profileName,
-        imageUrl: photourl,
+        imageUrl: photourl
       }).then(() => {
-          localStorage.setItem("hasDetails", true);
-          console.log("Profile details updated successfully");
+        console.log("Profile document updated successfully!");
       }).catch((error) => {
-          console.error("Error updating profile:", error);
+        console.error("Error updating profile document:", error);
       });
-  }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  }).catch((error) => {
+    console.error("Error updating profile:", error);
+  });
     
   
-
-
- 
 
   return (
     <div className="w-[23%]">
