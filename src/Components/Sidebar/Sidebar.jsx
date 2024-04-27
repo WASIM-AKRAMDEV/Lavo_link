@@ -97,32 +97,29 @@ const Sidebar = () => {
         console.log("User display name:", user.displayName);
         setProfileName(user.displayName);
         setPhotourl(user.photoURL);
+        localStorage.setItem("hasDetails", true);
       }
     });
   }, [auth]);
 
-  const hasDetails = localStorage.getItem("hasDetails");
-  if (!hasDetails) {
-    updateProfile(auth.currentUser, {
-      profileName: profileName,
-      imageUrl: photourl,
-    })
-      .then(async () => {
-        // Profile updated!
-        console.log("test");
-        await updateDoc(doc(firestore, "profile", "IF7KyLY3v7plAay5NXWV"), {
-          profileName: profileName,
-          imageUrl: photourl,
-        }).then(() => {
+    const hasDetails = localStorage.getItem("hasDetails");
+    if (!hasDetails) {
+      console.log("wasim baie")
+      updateProfile((auth.currentUser, "profile", "IF7KyLY3v7plAay5NXWV"),{
+        profileName: profileName,
+        imageUrl: photourl,
+      }).then(() => {
           localStorage.setItem("hasDetails", true);
-          console.log("test1");
-        });
-      })
-      .catch((error) => {
-        // An error occurred
-        // ...
+          console.log("Profile details updated successfully");
+      }).catch((error) => {
+          console.error("Error updating profile:", error);
       });
   }
+    
+  
+
+
+ 
 
   return (
     <div className="w-[23%]">

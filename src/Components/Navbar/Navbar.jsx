@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import {
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IoSearch } from "react-icons/io5";
@@ -19,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-
 
 // Firebase configuration
 const firebaseConfig = {
@@ -102,7 +98,6 @@ const Navbar = () => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
               setProfileData(data);
-             
             } else {
               console.log("No such document!");
             }
@@ -124,7 +119,7 @@ const Navbar = () => {
   const handleLogout = () => {
     signOut(database)
       .then(() => {
-        localStorage.removeItem("loggedIn");
+        localStorage.clear();
         console.log("User signed out successfully");
         navigate("/signUp");
       })
@@ -216,9 +211,7 @@ const Navbar = () => {
                         {/* Set the profile image here */}
                         <img
                           className="h-full w-full rounded-full "
-                          src={
-                             profileData.imageUrl
-                          }
+                          src={profileData.imageUrl}
                           alt="Profile"
                         />
                       </div>
@@ -253,9 +246,7 @@ const Navbar = () => {
                           >
                             <img
                               className="h-full w-full rounded-lg "
-                              src={
-                                 profileData.imageUrl
-                              }
+                              src={profileData.imageUrl}
                               alt="Profile"
                             />
                           </a>
