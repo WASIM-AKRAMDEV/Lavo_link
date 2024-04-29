@@ -18,7 +18,7 @@ import ThirdPage from "../../Pages/ThirdPage";
 import MessageLayout from "../MessageLayout/MessageLayout";
 import YourOrders from "../../Pages/Yourorder";
 // import SignIn from "../SignInForm/signIn";
-import SignIn from "../SignInForm/signIn";
+import SignIn from "../signInForm/signIn";
 import SignUp from "../SignUpForm/signUp";
 
 const Navigation = () => {
