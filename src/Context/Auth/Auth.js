@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../../FirebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 
 // Function to add user collection in Firestore
 // Function to add data to Firestore

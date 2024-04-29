@@ -89,7 +89,7 @@ const Sidebar = () => {
     };
 
     fetchProfileData();
-  }, []);
+  }, [currentUserUid]);
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -8,12 +8,20 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { provider, database, db } from "../../FirebaseConfig";
-import { updateDoc, doc } from "firebase/firestore";
+import { provider} from "../../FirebaseConfig";
+import { AuthContext } from "../../Context/Auth/Auth";
+
 
 const SignUp = () => {
+  const {
+ 
+    signInWithGoogle,
+    signInWithFacebook,
+   
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  
   const [errors, setErrors] = useState({ email: null, password: null });
 
   useEffect(() => {
@@ -52,62 +60,62 @@ const SignUp = () => {
       });
   };
 
-  const signInwithGoogle = () => {
-    const auth = getAuth();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
+  // const signInwithGoogle = () => {
+  //   const auth = getAuth();
+  //   signInWithPopup(auth, provider)
+  //     .then(async (result) => {
+  //       // This gives you a Google Access Token. You can use it to access the Google API.
+  //       const credential = GoogleAuthProvider.credentialFromResult(result);
+  //       const token = credential.accessToken;
+  //       // The signed-in user info.
+  //       const user = result.user;
 
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-        // await updateDoc(doc(database, "profile", "IF7KyLY3v7plAay5NXWV"), {
-        //   profileName: user.displayName,
-        //   imageUrl: user.photoURL,
-        // });
+  //       // IdP data available using getAdditionalUserInfo(result)
+  //       // ...
+  //       // await updateDoc(doc(database, "profile", "IF7KyLY3v7plAay5NXWV"), {
+  //       //   profileName: user.displayName,
+  //       //   imageUrl: user.photoURL,
+  //       // });
 
-        console.log(token, user);
-        localStorage.setItem("loggedIn", true);
+  //       console.log(token, user);
+  //       localStorage.setItem("loggedIn", true);
        
-        navigate("/");
-      })
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          setErrors({ ...errors, email: "Email already in use" });
-        }
-        if (error.code === "auth/weak-password") {
-          setErrors({
-            ...errors,
-            password: "Password should be at least 6 characters",
-          });
-        }
-      });
-  };
-  // signin with facebook
-  const handleSignInWithFacebook = () => {
-    const auth = getAuth();
-    const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // Successful sign-in
-        const user = result.user;
-        console.log("User signed in with Facebook:", user);
-        localStorage.setItem("loggedIn", true);
-        navigate("/");
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error("Error signing in with Facebook:", error);
-        // You can provide specific error messages to the user based on error.code
-        // For example:
-        // if (error.code === "auth/account-exists-with-different-credential") {
-        //   alert("An account already exists with the same email address but different sign-in credentials. Try signing in with a different method.");
-        // }
-      });
-  };
+  //       navigate("/");
+  //     })
+  //     .catch((error) => {
+  //       if (error.code === "auth/email-already-in-use") {
+  //         setErrors({ ...errors, email: "Email already in use" });
+  //       }
+  //       if (error.code === "auth/weak-password") {
+  //         setErrors({
+  //           ...errors,
+  //           password: "Password should be at least 6 characters",
+  //         });
+  //       }
+  //     });
+  // };
+  // // signin with facebook
+  // const handleSignInWithFacebook = () => {
+  //   const auth = getAuth();
+  //   const provider = new FacebookAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then((result) => {
+  //       // Successful sign-in
+  //       const user = result.user;
+  //       console.log("User signed in with Facebook:", user);
+  //       localStorage.setItem("loggedIn", true);
+  //       navigate("/");
+  //     })
+  //     .catch((error) => {
+  //       // Handle errors
+  //       console.error("Error signing in with Facebook:", error);
+  //       // You can provide specific error messages to the user based on error.code
+  //       // For example:
+  //       // if (error.code === "auth/account-exists-with-different-credential") {
+  //       //   alert("An account already exists with the same email address but different sign-in credentials. Try signing in with a different method.");
+  //       // }
+  //     });
+  // };
 
   const [showPassword, setShowPassword] = useState(false);
   // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -242,7 +250,7 @@ const SignUp = () => {
           </button>
           <p className="py-6">OR</p>
           <div
-            onClick={signInwithGoogle}
+            onClick={signInWithGoogle}
             className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 mb-5 cursor-pointer"
           >
             <img src="./assets/images/googleIcon.svg" alt="" />
@@ -254,7 +262,7 @@ const SignUp = () => {
               <span className="capitalize pl-6 mt-2">apple</span>
             </div>
             <div
-              onClick={handleSignInWithFacebook}
+              onClick={signInWithFacebook}
               className="flex align-center justify-center border-2 border-[#9a979e] pt-3 pb-3 w-full mb-5 ml-5 cursor-pointer max-sm:ml-0"
             >
               <img src="./assets/images/facebookIcon.svg" alt="" />

@@ -125,7 +125,7 @@ const SignIn = () => {
               <p className="capitalize text-[12px] leading-[24px] font-normal tracking-[0.5px] max-sm:order-2 ">
                 not a member?{" "}
                 <span className="font-bold text-[#221d59] cursor-pointer">
-                  <Link to="/sign-in">Signup now</Link>
+                  <Link to="/sign-up">Signup now</Link>
                 </span>
               </p>
               <a
