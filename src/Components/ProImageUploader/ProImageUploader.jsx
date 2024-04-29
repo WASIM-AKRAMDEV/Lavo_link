@@ -89,7 +89,7 @@ const ProImageUploader = ({
         </button>
       )}
       <div className="w-[90px] h-[90px] overflow-hidden bg-white rounded-full focus:shadow-lg border-dashed border border-[#7b747e] flex flex-col justify-center items-center">
-        <label htmlFor="image" className="block cursor-pointer">
+        <label htmlFor="image" className="block cursor-pointer w-full h-full">
           <input
             type="file"
             id="image"
@@ -113,7 +113,7 @@ const ProImageUploader = ({
                   
               }
               alt="Selected"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover bg-cover"
               />
               {console.log("Hello Wasim Baie" ,proData.imageURl)}
             {selectedImage && (

@@ -17,16 +17,17 @@ import SecondPage from "../../Pages/SecondPage";
 import ThirdPage from "../../Pages/ThirdPage";
 import MessageLayout from "../MessageLayout/MessageLayout";
 import YourOrders from "../../Pages/Yourorder";
-// import SignIn from "../SignInForm/signIn";
 import SignIn from "../SignInForm/signIn";
-import SignUp from "../SignUpForm/signUp";
+import SignUp from "../SignUpForm/signUp"
+
+
 
 const Navigation = () => {
   return (
     <div>
       <Routes>
         <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-up" element={<SignUp/>} />
 
         <Route element={<Protected />}>
           <Route path="/" element={<AppLayout />}>
