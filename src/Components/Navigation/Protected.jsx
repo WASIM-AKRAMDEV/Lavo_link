@@ -5,7 +5,7 @@ const Protected = () => {
 
     let loggedIn = localStorage.getItem("loggedIn");
 
-    return loggedIn ? <Outlet /> : <Navigate to="/SignUp" />
+    return loggedIn ? <Outlet /> : <Navigate to="/sign-in" />
 };
 
 export default Protected;

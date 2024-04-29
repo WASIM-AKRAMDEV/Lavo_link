@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Fragment } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IoSearch } from "react-icons/io5";
@@ -11,22 +11,22 @@ import { PiSignOutBold } from "react-icons/pi";
 import { Link, NavLink } from "react-router-dom";
 import { ethers } from "ethers";
 import { signOut } from "firebase/auth";
-import { database } from "../../FirebaseConfig";
+import { auth } from "../../FirebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { AuthContext } from "../../Context/Auth/Auth";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
-  authDomain: "signuplogin-e03e9.firebaseapp.com",
-  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
-  projectId: "signuplogin-e03e9",
-  storageBucket: "signuplogin-e03e9.appspot.com",
-  messagingSenderId: "675718779196",
-  appId: "1:675718779196:web:3951e5694ceb8887180e39",
-  measurementId: "G-KCGENMV7J1",
+  apiKey: "AIzaSyBIOt1C0L9e82ACdQy4A4Gbp5HW6NLWWks",
+  authDomain: "waseem-2-4c056.firebaseapp.com",
+  projectId: "waseem-2-4c056",
+  storageBucket: "waseem-2-4c056.appspot.com",
+  messagingSenderId: "653699414802",
+  appId: "1:653699414802:web:18ccb768440e40e2f811cb",
+  measurementId: "G-8VP78FPVHS",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -51,8 +51,10 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+  const { currentUserUid } = useContext(AuthContext);
   const [walletAddress, setWalletAddress] = useState();
   const [profileData, setProfileData] = useState({});
+  console.log(profileData);
 
   const location = useLocation();
   const connectWallet = async () => {
@@ -73,27 +75,13 @@ const Navbar = () => {
   }, [localStorage.getItem("wallAddr")]);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   onAuthStateChanged(getAuth(), (user) => {
-  //     console.log(user);
-  //     if (user) {
-  //       console.log("current users data", user);
-
-  //       setProfileName(user.displayName);
-  //       setPhotourl(user.photoURL);
-  //     }
-  //   });
-  // }, []);
-
-  ///////////////////////////////////////
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        // const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
-        const userId = "IF7KyLY3v7plAay5NXWV";
-        if (userId) {
-          const profileDocRef = doc(firestore, "profile", userId);
+        if (currentUserUid) {
+          const db = getFirestore();
+          const profileDocRef = doc(db, "users", currentUserUid);
           const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
@@ -117,11 +105,11 @@ const Navbar = () => {
   ////////////////////////////////
 
   const handleLogout = () => {
-    signOut(database)
+    signOut(auth)
       .then(() => {
         localStorage.clear();
         console.log("User signed out successfully");
-        navigate("/signUp");
+        navigate("/sign-in");
       })
       .catch((error) => {
         console.error("Error signing out:", error.message);
@@ -211,14 +199,14 @@ const Navbar = () => {
                         {/* Set the profile image here */}
                         <img
                           className="h-full w-full rounded-full "
-                          src={profileData.imageUrl}
+                          src={profileData.photoURL}
                           alt="Profile"
                         />
                       </div>
                       <div>
                         <div className="flex justify-between items-center">
                           <h5 className="text-sm text-[#151D48] font-medium">
-                            {profileData.profileName}
+                            {profileData.displayName}
                           </h5>
                           <IoIosArrowDown className="text-sm" />
                         </div>
@@ -246,14 +234,14 @@ const Navbar = () => {
                           >
                             <img
                               className="h-full w-full rounded-lg "
-                              src={profileData.imageUrl}
+                              src={profileData.photoURL}
                               alt="Profile"
                             />
                           </a>
                         )}
                       </Menu.Item>
                       <h5 className="text-[#737791] text-xs my-2">
-                        {profileData.profileName}
+                        {profileData.displayName}
                       </h5>
                       <div className="flex gap-1 py-2">
                         <button className="bg-[#5D5FEF] text-white font-normal text-sm px-[15px] py-[2px] rounded">

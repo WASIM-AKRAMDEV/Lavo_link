@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
@@ -8,34 +8,35 @@ import { Link } from "react-router-dom";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 // import { GiCloudUpload } from "react-icons/gi";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { database } from "../../FirebaseConfig";
+import { AuthContext } from "../../Context/Auth/Auth";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
-  authDomain: "signuplogin-e03e9.firebaseapp.com",
-  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
-  projectId: "signuplogin-e03e9",
-  storageBucket: "signuplogin-e03e9.appspot.com",
-  messagingSenderId: "675718779196",
-  appId: "1:675718779196:web:3951e5694ceb8887180e39",
-  measurementId: "G-KCGENMV7J1",
+  apiKey: "AIzaSyBIOt1C0L9e82ACdQy4A4Gbp5HW6NLWWks",
+  authDomain: "waseem-2-4c056.firebaseapp.com",
+  projectId: "waseem-2-4c056",
+  storageBucket: "waseem-2-4c056.appspot.com",
+  messagingSenderId: "653699414802",
+  appId: "1:653699414802:web:18ccb768440e40e2f811cb",
+  measurementId: "G-8VP78FPVHS",
 };
 
 const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
 
 const Sidebar = () => {
+  const {
+   currentUserUid
+  } = useContext(AuthContext);
   const [editMode, setEditMode] = useState(false);
   const [profileName, setProfileName] = useState(null);
   const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  const [photourl, setPhotourl] = useState(null);
+
   const [newText, setNewText] = useState("");
   const [profileData, setProfileData] = useState({
     imageUrl: "",
@@ -61,13 +62,14 @@ const Sidebar = () => {
     updatedTexts.splice(index, 1);
     setAdditionalTexts(updatedTexts);
   };
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         // const userId = localStorage.getItem("userId"); // Assuming you store the user ID in localStorage
-        const userId = "IF7KyLY3v7plAay5NXWV";
-        if (userId) {
-          const profileDocRef = doc(firestore, "profile", userId);
+    
+        if (currentUserUid) {
+          const profileDocRef = doc(firestore, "users", currentUserUid);
           const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
             if (docSnapshot.exists()) {
               const data = docSnapshot.data();
@@ -89,43 +91,7 @@ const Sidebar = () => {
     fetchProfileData();
   }, []);
 
-  const auth = getAuth();
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      console.log("User:", user);
-      if (user) {
-        setProfileName(user.displayName);
-        setPhotourl(user.photoURL);
-      }
-    });
-  }, [auth]);
-  updateProfile(auth.currentUser, {
-    displayName: profileName,
-    photoURL: photourl
-  }).then(() => {
-    console.log("Profile updated successfully!");
-    try {
-      // Update profile document in Firestore
-      console.log("Updating profile document...");
-      console.log("Profile name:", profileName);
-      console.log("Photo URL:", photourl);
-      updateDoc(doc(firestore, "profile", "IF7KyLY3v7plAay5NXWV"), {
-        profileName: profileName,
-        imageUrl: photourl
-      }).then(() => {
-        console.log("Profile document updated successfully!");
-      }).catch((error) => {
-        console.error("Error updating profile document:", error);
-      });
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  }).catch((error) => {
-    console.error("Error updating profile:", error);
-  });
-    
-  
 
   return (
     <div className="w-[23%]">
@@ -146,8 +112,7 @@ const Sidebar = () => {
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
             <img
               src={
-                profileData.imageUrl
-                // photourl
+               profileData.photoURL
               }
               alt=""
               className="w-full h-full"
@@ -163,7 +128,7 @@ const Sidebar = () => {
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileData.profileName
+                profileData.displayName
               )}
             </h3>
             <p className="text-xs">

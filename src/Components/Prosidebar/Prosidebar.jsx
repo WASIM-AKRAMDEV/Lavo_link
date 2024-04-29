@@ -1,45 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
 import { FaLocationDot } from "react-icons/fa6";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { VscLink } from "react-icons/vsc";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
-// import { GiCloudUpload } from "react-icons/gi";
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   updateDoc,
   doc,
   getDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import ProImageUploader from "../ProImageUploader/ProImageUploader";
-import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+
+import { AuthContext } from "../../Context/Auth/Auth";
 
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
-  authDomain: "signuplogin-e03e9.firebaseapp.com",
-  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
-  projectId: "signuplogin-e03e9",
-  storageBucket: "signuplogin-e03e9.appspot.com",
-  messagingSenderId: "675718779196",
-  appId: "1:675718779196:web:3951e5694ceb8887180e39",
-  measurementId: "G-KCGENMV7J1",
+  apiKey: "AIzaSyBIOt1C0L9e82ACdQy4A4Gbp5HW6NLWWks",
+  authDomain: "waseem-2-4c056.firebaseapp.com",
+  projectId: "waseem-2-4c056",
+  storageBucket: "waseem-2-4c056.appspot.com",
+  messagingSenderId: "653699414802",
+  appId: "1:653699414802:web:18ccb768440e40e2f811cb",
+  measurementId: "G-8VP78FPVHS"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
 const Prosidebar = () => {
+  const {
+    currentUserUid
+   } = useContext(AuthContext);
   const [editMode, setEditMode] = useState(false);
-  const [profileName, setProfileName] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [profileTitle, setProfileTitle] = useState("");
   const [fromLocation, setFromLocation] = useState("United States");
   const [memberSince, setMemberSince] = useState("Mar, 2024");
-  // const [photourl, setPhotourl] = useState(null);
   const [newText, setNewText] = useState("");
   const [additionalTexts, setAdditionalTexts] = useState([
     "Education",
@@ -71,54 +74,59 @@ const Prosidebar = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const [proData, setProData] = useState({
-    imageUrl: "",
-    profileName: "",
-    profileTitle: "",
-  });
+  const [proData, setProData] = useState({});
   
+
+
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProfileData = async () => {
       try {
-        const db = getFirestore();
-        const ProfileDocRef = doc(db, "profile", "IF7KyLY3v7plAay5NXWV");
-        const docSnap = await getDoc(ProfileDocRef);
-        if (docSnap.exists()) {
-          const dataPro = { id: docSnap.id, ...docSnap.data() };
-          setProData(dataPro);
-          setProfileName(dataPro.profileName); // Set profileName here
-          console.log("Profile Data:", dataPro);
-        } else {
-          console.log("No such document!");
+        if (currentUserUid) {
+          const db = getFirestore();
+          const profileDocRef = doc(db, "users", currentUserUid);
+          const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
+            if (docSnapshot.exists()) {
+              const data = docSnapshot.data();
+              setProData(data);
+              setDisplayName(data.displayName); 
+            } else {
+              console.log("No such document!");
+            }
+          });
+
+          // Return the unsubscribe function to clean up the listener when the component unmounts
+          return () => unsubscribe();
         }
       } catch (error) {
-        console.error("Error fetching Profile data:", error);
+        console.error("Error fetching profile data:", error);
       }
     };
-  
-    fetchData();
+
+    fetchProfileData();
   }, []);
+
   console.log( "ProData in prosidebar:", proData)
   const saveProfileDataToFirestore = async (url) => {
     // Upload image to Firebase Storage
     const imageRef = ref(storage, `profile_images/${selectedImage}`);
     await uploadBytes(imageRef, selectedImage);
     // Save profile data to Firestore
-    await updateDoc(doc(db, "profile", "IF7KyLY3v7plAay5NXWV"), {
-      profileName: profileName,
+    await updateDoc(doc(db, "users", currentUserUid), {
+      displayName: displayName,
       profileTitle: profileTitle,
     });
-    console.log("Profile name", profileName);
+    console.log("Profile name", displayName);
     console.log(url);
     console.log("Profile data uploaded to Firestore!");
   };
 
 
   
-  const updateImageUrlInFirestore = async (imageUrl) => {
+  const updateImageUrlInFirestore = async (photoURL) => {
     // Update image URL in Firestore
-    await updateDoc(doc(db, "profile", "IF7KyLY3v7plAay5NXWV"), {
-      imageUrl: imageUrl,
+    await updateDoc(doc(db, "users", currentUserUid), {
+      photoURL: photoURL,
     });
     console.log("Image URL updated in Firestore!");
   };
@@ -136,41 +144,6 @@ const Prosidebar = () => {
   };
 
 
-  // const auth = getAuth();
-
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     console.log("User:", user);
-  //     if (user) {
-  //       setProfileName(user.displayName);
-  //       setPhotourl(user.photoURL);
-  //     }
-  //   });
-  // }, [auth]);
-  // updateProfile(auth.currentUser, {
-  //   displayName: profileName,
-  //   photoURL: photourl
-  // }).then(() => {
-  //   console.log("Profile updated successfully!");
-  //   try {
-  //     // Update profile document in Firestore
-  //     console.log("Updating profile document...");
-  //     console.log("Profile name:", profileName);
-  //     console.log("Photo URL:", photourl);
-  //     updateDoc(doc(db, "profile", "IF7KyLY3v7plAay5NXWV"), {
-  //       profileName: profileName,
-  //       imageUrl: photourl
-  //     }).then(() => {
-  //       console.log("Profile document updated successfully!");
-  //     }).catch((error) => {
-  //       console.error("Error updating profile document:", error);
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating profile:", error);
-  //   }
-  // }).catch((error) => {
-  //   console.error("Error updating profile:", error);
-  // });
  
   return (
     <div className="w-[23%]">
@@ -203,12 +176,12 @@ const Prosidebar = () => {
               {editMode ? (
                 <input
                   type="text"
-                  value={profileName}
-                  onChange={(e) => setProfileName(e.target.value)}
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
                   className="text-xl font-semibold text-[#151D48] outline-none border-none bg-transparent"
                 />
               ) : (
-                profileName
+               proData.displayName
               )}
             </h3>
             <p className="text-xs">

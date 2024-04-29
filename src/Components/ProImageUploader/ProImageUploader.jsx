@@ -8,15 +8,16 @@ import { FaCheck } from "react-icons/fa6";
 
 // Initialize Firebase (you should replace this with your Firebase config)
 const firebaseConfig = {
-  apiKey: "AIzaSyDv-WSayywnOPYfS1zFf6e9_OVWnOfxDC4",
-  authDomain: "signuplogin-e03e9.firebaseapp.com",
-  databaseURL: "https://signuplogin-e03e9-default-rtdb.firebaseio.com",
-  projectId: "signuplogin-e03e9",
-  storageBucket: "signuplogin-e03e9.appspot.com",
-  messagingSenderId: "675718779196",
-  appId: "1:675718779196:web:3951e5694ceb8887180e39",
-  measurementId: "G-KCGENMV7J1",
+  apiKey: "AIzaSyBIOt1C0L9e82ACdQy4A4Gbp5HW6NLWWks",
+  authDomain: "waseem-2-4c056.firebaseapp.com",
+  projectId: "waseem-2-4c056",
+  storageBucket: "waseem-2-4c056.appspot.com",
+  messagingSenderId: "653699414802",
+  appId: "1:653699414802:web:18ccb768440e40e2f811cb",
+  measurementId: "G-8VP78FPVHS"
 };
+
+
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -108,7 +109,7 @@ const ProImageUploader = ({
               src={
                 selectedImage
                   ? URL.createObjectURL(selectedImage)
-                  : proData?.imageUrl
+                  : proData?.photoURL
                   
               }
               alt="Selected"
